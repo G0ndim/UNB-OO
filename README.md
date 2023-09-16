@@ -2,7 +2,7 @@
 Projeto administrado em torno do paradigma de programação orientado a objetos.
 
 ## Objetivos
-Desenvolver habilidades praticas para a implementação de sistemas de software projetados em torno da abordagem OO a partir de:
+Desenvolver habilidades práticas para a implementação de sistemas de software projetados em torno da abordagem OO a partir de:
 * Estudo sobre os contrastes entre o paradigma procedural para desenvolvimento de softwares
 * Modelagem de projetos baseados na linguagem-padrão UML
 * Realização de miniprojetos durante exposição de conteúdos teóricos e práticos
