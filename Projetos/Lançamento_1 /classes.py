@@ -43,7 +43,13 @@ class Poligono(Ponto):
         return float(abs(area / 2.0))
 
     def perimetro(self):
-        pass
+        perimetro = 0
+        for i in range(self.num - 1):
+            perimetro += (((abs(self.crd_x[i] - self.crd_x[i + 1]) ** 2) + (abs(self.crd_y[i] - self.crd_y[i + 1])
+            ** 2)) ** (1 / 2))
+        perimetro += (((abs(self.crd_x[-1] - self.crd_x[0]) ** 2) + (abs(self.crd_y[-1] - self.crd_y[0]) ** 2))
+                      ** (1 / 2))
+        return perimetro
 
     @classmethod
     def tipo(cls):
