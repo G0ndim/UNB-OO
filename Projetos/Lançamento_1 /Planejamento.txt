@@ -1,0 +1,51 @@
+
+# Lançamento 1
+– Projetar um pequeno universo interativo dentro do qual seja possível registrar formas geométricas
+bidimensionais úteis para verificações e cálculos simples.
+
+
+Classe Ponto():
+-Construtor Ponto(x, y, num)
+-Atributo coordenadas_x = x
+-Atributo coordenadas_y = y
+-Atributo numero de pontos = num
+.Função Localização
+  retorna "(x1, y1), (x2, y2), ..., (xnum, ynum)"
+
+
+Classe Poligono(Ponto):
+-Construtor Poligono(Vertices)
+.Função Área
+  retorna a area do Poligono
+.Função Perímetro
+  retorna o perimentro do Poligono
+.Funcao Tipo
+  retorna o tipo do poligono "(triangulo, quadrado, hexagono...)"
+
+
+Classe Triangulo(Poligono):
+-Construtor(Vertices)
+.Função Área
+  retorna a area do Poligono
+.Função Perímetro
+  retorna o perimentro do Poligono
+.Funcao Tipo
+  retorna o tipo do triangulo (Equilatero, Escaleno, Retangulo...)
+
+Classe Quadrilatero(Poligono):
+-Construtor(Vertices)
+.Função Área
+  retorna a area do quadrilatero
+.Função Perímetro
+  retorna o perimentro do quadrilatero
+.Funcao Tipo
+  retorna o tipo do qudrilatero (Quadrado, Retangulo, Losangulo, Trapezio, Paralelograma)
+
+Classe Pentagono(Poligono):
+  -Construtor(Vertices)
+.Função Área
+  retorna a area do Pentagono
+.Função Perímetro
+  retorna o perimentro do Pentagono
+.Funcao Tipo
+  retorna o tipo do Pentagono (Regular, Irregular)
