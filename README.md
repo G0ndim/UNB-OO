@@ -17,7 +17,7 @@ Desenvolver habilidades práticas para a implementação de sistemas de software
 
 ## Projetos
 
-### [Lançamento 1](./Projetos/Lancamento_1)
+### [Lançamento 1](./Projetos/Lançamento_1)
 #### Objetivo:
 Projetar em pseudocódigo um pequeno universo interativo dentro do qual seja possível registrar formas geométricas bidimensionais
 úteis para verificações e cálculos simples.
