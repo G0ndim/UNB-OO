@@ -26,7 +26,7 @@ class Poligono(Ponto):
 
         ATENCAO! para essa funcao funcionar e preciso utilizar a outra funcao
         "organizador_de_lista", pois e preciso que os vertices do poligono
-        estejam ordenadas de forma anti-horaria para a funcao funcionar
+        estejam ordenadas de forma anti-horaria
 
         :param x: lista das posicoes no eixo x
         :param y: lista das posicoes no eixo y
