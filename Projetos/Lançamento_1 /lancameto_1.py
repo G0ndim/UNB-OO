@@ -1,6 +1,5 @@
-
+import classes
 from classes import *
-
 
 while True:
 
@@ -10,20 +9,18 @@ while True:
     print()
     print(f"{'=-=' * 20}")
 
-    figuras = ['Poligono', 'Triangulo', "Quadrilatero", "Pentagono", "Hexagono"]
+    figuras = {1: Poligono, 2: Triangulo, 3: Quadrilatero, 4: Pentagono, 5: Hexagono}
 
-    for i, j in enumerate(figuras):
-        print(f"{i + 1}. {j}")
+    for i, j in figuras.items():
+        print(f"{i}. {j.__str__()}")
 
-    num = input(f">>Escolha uma figura: ")
+    num = int(input(f">>Escolha uma figura: "))
 
-    """
-    for i, j in enumerate(figuras):
-        if num == i:
-            fig =
-    
+    if num != 1:
+        n = num + 1
+    else:
+        n = int(input("Quantos vértices você quer digitar?: "))
 
-    n = int(input("Quantos vértices você quer digitar?: "))
     x, y = [], []
 
     for i in range(n):
@@ -31,19 +28,19 @@ while True:
         y.append(float(input(f"Digite o valor de y{i + 1}: ")))
 
     organizador_de_lista(x, y)
+    forma = figuras[num](x, y, n)
 
-    poligono = Poligono(x, y, n)
-    tri = Triangulo(x, y, n)
-    poligono.localizacoes()
+    while True:
+        print(f'Vértices: {forma.localizacoes()}')
+        if input("Deseja trocar algum valor?(s/n): ").strip()[0] in 'Ss':
+            posicao = input("Digite a posição do vértice a ser trocado:")
+            forma.troca_coordenada(posicao)
+        else:
+            break
 
-    print(tri.tipo())
-    
-    """
-
-
-
-
-
-
+    print(f"Area: {forma.area()}")
+    print(f"Perímetro: {forma.perimetro()}")
+    print(f"Tipo: {forma.tipo()}")
 
 
+# problema na funcao troca_coordenada

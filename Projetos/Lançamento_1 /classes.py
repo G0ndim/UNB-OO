@@ -6,10 +6,10 @@ class Ponto:
         self.num = n
 
     def localizacoes(self):
-        print("Localizacoes: ", end='')
+        locs = {}
         for i in range(len(self.crd_x)):
-            print(f"({self.crd_x[i]}, {self.crd_y[i]})", end=' ')
-        print()
+            locs.update({i+1: (self.crd_x[i], self.crd_y[i])})
+        return locs
 
     def troca_coordenada(self, posicao):
         """
@@ -17,9 +17,9 @@ class Ponto:
         :param posicao: Posição do do vertice dentro da lista
         :return:
         """
-        x_novo = input(f"Digite o novo valor de x{posicao}: ")
-        y_novo = input(f"Digite o novo valor de y{posicao}: ")
-        print(f"({self.crd_x[posicao]}, {self.crd_y[posicao]}) --> ({x_novo}, {y_novo})")
+        x_novo = int(input(f"Digite o novo valor de x{posicao}: "))
+        y_novo = int(input(f"Digite o novo valor de y{posicao}: "))
+        print(f" ({self.crd_x[posicao]}, {self.crd_y[posicao]}) --> ({x_novo}, {y_novo})")
         resposta = input("Quer manter as alterações?(s/n)")
         if resposta.strip()[0] in 'Ss':
             self.crd_x[posicao] = x_novo
@@ -73,7 +73,12 @@ class Poligono(Ponto):
 
     @classmethod
     def tipo(cls):
-        raise NotImplementedError('A classe filha precisa implementar esse metodo')
+        #raise NotImplementedError('A classe filha precisa implementar esse metodo')
+        pass
+
+    @classmethod
+    def __str__(cls):
+        return f"Poligono"
 
 
 class Triangulo(Poligono):
@@ -90,16 +95,22 @@ class Triangulo(Poligono):
         else:
             return "Escaleno"
 
+    @classmethod
+    def __str__(cls):
+        return f"Triângulo"
+
 
 class Quadrilatero(Poligono):
 
     def __init__(self, x, y, n):
         super().__init__(x, y, n)
 
-    @classmethod
-    def tipo(cls):
-
+    def tipo(self):
         pass
+
+    @classmethod
+    def __str__(cls):
+        return f"Quadrilátero"
 
 
 class Pentagono(Poligono):
@@ -107,9 +118,15 @@ class Pentagono(Poligono):
     def __init__(self, x, y, n):
         super().__init__(x, y, n)
 
+    def tipo(self):
+        for i in range(len(self.lados())):
+            if self.lados()[0] != self.lados()[i]:
+                return "Irregular"
+        return "Regular"
+
     @classmethod
-    def tipo(cls):
-        return f'{cls}'
+    def __str__(cls):
+        return f"Pentagono"
 
 
 class Hexagono(Pentagono):
@@ -117,9 +134,15 @@ class Hexagono(Pentagono):
     def __init__(self, x, y, n):
         super().__init__(x, y, n)
 
+    def tipo(self):
+        for i in range(len(self.lados())):
+            if self.lados()[0] != self.lados()[i]:
+                return "Irregular"
+        return "Regular"
+
     @classmethod
-    def tipo(cls):
-        return f'{cls}'
+    def __str__(cls):
+        return f"Hexagono"
 
 
 def organizador_de_lista(lista_x, lista_y):
