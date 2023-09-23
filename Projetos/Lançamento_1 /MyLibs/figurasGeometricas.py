@@ -11,19 +11,9 @@ class Ponto:
             locs.update({i+1: (self.crd_x[i], self.crd_y[i])})
         return locs
 
-    def troca_coordenada(self, posicao):
-        """
-        Método para trocar as coordenadas de um dado vertice
-        :param posicao: Posição do do vertice dentro da lista
-        :return:
-        """
-        x_novo = int(input(f"Digite o novo valor de x{posicao}: "))
-        y_novo = int(input(f"Digite o novo valor de y{posicao}: "))
-        print(f" ({self.crd_x[posicao]}, {self.crd_y[posicao]}) --> ({x_novo}, {y_novo})")
-        resposta = input("Quer manter as alterações?(s/n)")
-        if resposta.strip()[0] in 'Ss':
-            self.crd_x[posicao] = x_novo
-            self.crd_y[posicao] = y_novo
+    def troca_coordenada(self, posicao, x_novo, y_novo):
+        self.crd_x[posicao] = x_novo
+        self.crd_y[posicao] = y_novo
         pass
 
     def lados(self):
@@ -73,7 +63,7 @@ class Poligono(Ponto):
 
     @classmethod
     def tipo(cls):
-        #raise NotImplementedError('A classe filha precisa implementar esse metodo')
+        # raise NotImplementedError('A classe filha precisa implementar esse metodo')
         pass
 
     @classmethod
@@ -89,11 +79,11 @@ class Triangulo(Poligono):
     def tipo(self):
         x = [self.lados().count(i) for i in self.lados()]
         if 3 in x:
-            return "Equilatero"
+            return "Triangulo Equilatero"
         elif 2 in x:
-            return "Isoceles"
+            return "Triangulo Isoceles"
         else:
-            return "Escaleno"
+            return "Triangulo Escaleno"
 
     @classmethod
     def __str__(cls):
@@ -121,15 +111,15 @@ class Pentagono(Poligono):
     def tipo(self):
         for i in range(len(self.lados())):
             if self.lados()[0] != self.lados()[i]:
-                return "Irregular"
-        return "Regular"
+                return "Pentagono Irregular"
+        return "Pentagono Regular"
 
     @classmethod
     def __str__(cls):
         return f"Pentagono"
 
 
-class Hexagono(Pentagono):
+class Hexagono(Poligono):
 
     def __init__(self, x, y, n):
         super().__init__(x, y, n)
@@ -137,45 +127,10 @@ class Hexagono(Pentagono):
     def tipo(self):
         for i in range(len(self.lados())):
             if self.lados()[0] != self.lados()[i]:
-                return "Irregular"
-        return "Regular"
+                return "Hexagono Irregular"
+        return "Hexagono Regular"
 
     @classmethod
     def __str__(cls):
         return f"Hexagono"
-
-
-def organizador_de_lista(lista_x, lista_y):
-    """
-    Função que organiza os vértices de um poligono convexo de forma anti-horária em relação ao ângulo entre suas
-    coordenadas e um ponto central.
-
-    :param lista_x: lista contendo os valores no eixo x
-    :param lista_y: lista contendo os valores no eixo y
-    :return:
-    """
-    from math import atan2, pi
-    lista = []
-
-    # [x1, x2, x3 ...] , [y1, y2, y3...]    --->   [[x1, y1], [x2, y2], ...]
-    for i in range(len(lista_x)):
-        lis = []
-        lis.append(lista_x[i])
-        lis.append(lista_y[i])
-        lista.append(lis)
-        del lis
-
-    # Organiza as coordenadas em uma lista ordenada com relação ao ângulo formado
-    # entre elas e um ponto no centro do poligono, de forma anti-horária.
-    menor = min(lista, key=lambda x: (x[1], x[0]))
-    vertices = sorted(lista, key=lambda x: atan2(x[1] - menor[1], x[0] - menor[0]) + 2 * pi)
-
-    # Retorna os valores de x e y para suas respectivas lista, ja organizados.
-    lista_x.clear()
-    lista_y.clear()
-    for i in vertices:
-        lista_x.append(i[0])
-        lista_y.append(i[1])
-    pass
-
 
