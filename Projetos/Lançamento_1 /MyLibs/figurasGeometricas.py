@@ -37,7 +37,7 @@ class Poligono(Ponto):
         Função que calcula a área de um poligono pelo Método de Gauss
         dado um determinado número de vertices dentro de um plano cartesiano.
 
-        ATENCAO! para esse método funcionar é preciso primtiro utilizar a função
+        ATENÇÃO! para esse método funcionar é preciso utilizar a função
         "organizador_de_lista", pois os vertices do poligono precisam estar
         ordenados de forma anti-horaria
 
