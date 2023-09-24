@@ -37,13 +37,10 @@ class Poligono(Ponto):
         Função que calcula a área de um poligono pelo Método de Gauss
         dado um determinado número de vertices dentro de um plano cartesiano.
 
-        ATENÇÃO! para esse método funcionar é preciso utilizar a função
+        ATENCAO! para esse método funcionar é preciso primtiro utilizar a função
         "organizador_de_lista", pois os vertices do poligono precisam estar
         ordenados de forma anti-horaria
 
-        :param x: lista das posições no eixo x
-        :param y: lista das posiçõs no eixo y
-        :param n: número de coordenadas
         :return: Área do poligono
         """
         area = 0.0
@@ -58,13 +55,43 @@ class Poligono(Ponto):
     def perimetro(self):
         return sum(self.lados())
 
-    def verifica_convexo(self):
-        pass
+    def angulos_internos(self):
+        from math import atan2, degrees, pi
+        lista = []
 
-    @classmethod
-    def tipo(cls):
-        # raise NotImplementedError('A classe filha precisa implementar esse metodo')
-        pass
+        for i in range(len(self.crd_x)):
+            resultado = (atan2(self.crd_y[-1] - self.crd_y[0], self.crd_x[-1] - self.crd_x[0])
+                         - atan2(self.crd_y[1] - self.crd_y[0], self.crd_x[1] - self.crd_x[0]))
+            if resultado < 0:
+                resultado = (2 * pi) + resultado
+            lista.append(round(degrees(resultado)))
+            self.crd_x.insert(0, self.crd_x[-1])
+            self.crd_x.pop(-1)
+            self.crd_y.insert(0, self.crd_y[-1])
+            self.crd_y.pop(-1)
+
+        return lista
+
+    def verifica_convexo(self):
+        y = [i for i in self.angulos_internos() if i > 180]
+        if len(y) == 0:
+            return "convexo"
+        else:
+            return "concavo"
+
+    def tipo(self):
+        tipos = ["Triangulo", "Quadrilatero", "Pentagono", "Hexagono", "Poligono"]
+        i = len(self.crd_x)
+        if i > 5:
+            resposta = tipos[4]
+        else:
+            resposta = tipos[i - 3]
+        if self.verifica_convexo() == "concavo":
+            resposta = resposta + " concavo"
+        else:
+            resposta = resposta + " convexo"
+
+        return resposta
 
     @classmethod
     def __str__(cls):
@@ -82,8 +109,9 @@ class Triangulo(Poligono):
             return "Triangulo Equilatero"
         elif 2 in x:
             return "Triangulo Isoceles"
-        else:
-            return "Triangulo Escaleno"
+        elif 90 in self.angulos_internos():
+            return "Triangulo Retangulo"
+        return "Triangulo Escaleno"
 
     @classmethod
     def __str__(cls):
@@ -96,7 +124,27 @@ class Quadrilatero(Poligono):
         super().__init__(x, y, n)
 
     def tipo(self):
-        pass
+        if self.verifica_convexo() == "concavo":
+            return "Quadrilatero Concavo"
+        elif self.lados().count(self.lados()[0]) == 4:
+            if 90 in self.angulos_internos():
+                return "Quadrado"
+            else:
+                return "Losango"
+        elif self.lados()[0] == self.lados()[2] and self.lados()[1] == self.lados()[3]:
+            if 90 in self.angulos_internos():
+                return "Retangulo"
+            else:
+                return "Paralelogramo"
+        elif 90 in self.angulos_internos():
+            return "Trapezio retangulo"
+        elif self.lados()[0] == self.lados()[2] or self.lados()[1] == self.lados()[3]:
+            return "Trapezio isoceles"
+        else:
+            if self.angulos_internos()[0] + self.angulos_internos()[1] == 90:
+                return "Trapezio Escaleno"
+            else:
+                return "Quadrilatero Irregular"
 
     @classmethod
     def __str__(cls):
@@ -109,6 +157,8 @@ class Pentagono(Poligono):
         super().__init__(x, y, n)
 
     def tipo(self):
+        if self.verifica_convexo() == "concavo":
+            return "Pentagono Concavo"
         for i in range(len(self.lados())):
             if self.lados()[0] != self.lados()[i]:
                 return "Pentagono Irregular"
@@ -125,6 +175,8 @@ class Hexagono(Poligono):
         super().__init__(x, y, n)
 
     def tipo(self):
+        if self.verifica_convexo() == "concavo":
+            return "Hexagono Concavo"
         for i in range(len(self.lados())):
             if self.lados()[0] != self.lados()[i]:
                 return "Hexagono Irregular"

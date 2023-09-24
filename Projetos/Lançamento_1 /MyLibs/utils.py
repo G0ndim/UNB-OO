@@ -87,6 +87,7 @@ def troca_vertice(classe):
 def resultado(classe):
     print(f"Area: {classe.area()}")
     print(f"Perímetro: {classe.perimetro()}")
-    print(f"Tipo: {classe.tipo()}")
+    print(f"Angs: {classe.angulos_internos()}")
+    # print(classe.verifica_convexo())
+    print(classe.tipo())
     pass
-
