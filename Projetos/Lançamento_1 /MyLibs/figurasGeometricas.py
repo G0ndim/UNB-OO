@@ -80,22 +80,22 @@ class Poligono(Ponto):
             return "concavo"
 
     def tipo(self):
-        tipos = ["Triangulo", "Quadrilatero", "Pentagono", "Hexagono", "Poligono"]
+        tipos = ["Triângulo", "Quadrilátero", "Pentágono", "Hexágono", "Polígono"]
         i = len(self.crd_x)
         if i > 5:
             resposta = tipos[4]
         else:
             resposta = tipos[i - 3]
         if self.verifica_convexo() == "concavo":
-            resposta = resposta + " concavo"
+            resposta = resposta + " Côncavo"
         else:
-            resposta = resposta + " convexo"
+            resposta = resposta + " Convexo"
 
         return resposta
 
     @classmethod
     def __str__(cls):
-        return f"Poligono"
+        return f"Polígono"
 
 
 class Triangulo(Poligono):
@@ -106,12 +106,12 @@ class Triangulo(Poligono):
     def tipo(self):
         x = [self.lados().count(i) for i in self.lados()]
         if 3 in x:
-            return "Triangulo Equilatero"
+            return "Triângulo Equilátero"
         elif 2 in x:
-            return "Triangulo Isoceles"
+            return "Triângulo Isósceles"
         elif 90 in self.angulos_internos():
-            return "Triangulo Retangulo"
-        return "Triangulo Escaleno"
+            return "Triângulo Retângulo"
+        return "Triângulo Escaleno"
 
     @classmethod
     def __str__(cls):
@@ -133,18 +133,18 @@ class Quadrilatero(Poligono):
                 return "Losango"
         elif self.lados()[0] == self.lados()[2] and self.lados()[1] == self.lados()[3]:
             if 90 in self.angulos_internos():
-                return "Retangulo"
+                return "Retângulo"
             else:
                 return "Paralelogramo"
         elif 90 in self.angulos_internos():
-            return "Trapezio retangulo"
+            return "Trapezio Retângulo"
         elif self.lados()[0] == self.lados()[2] or self.lados()[1] == self.lados()[3]:
-            return "Trapezio isoceles"
+            return "Trapezio Isósceles"
         else:
             if self.angulos_internos()[0] + self.angulos_internos()[1] == 90:
                 return "Trapezio Escaleno"
             else:
-                return "Quadrilatero Irregular"
+                return "Quadrilátero Irregular"
 
     @classmethod
     def __str__(cls):
@@ -158,15 +158,15 @@ class Pentagono(Poligono):
 
     def tipo(self):
         if self.verifica_convexo() == "concavo":
-            return "Pentagono Concavo"
+            return "Pentágono Côncavo"
         for i in range(len(self.lados())):
             if self.lados()[0] != self.lados()[i]:
-                return "Pentagono Irregular"
-        return "Pentagono Regular"
+                return "Pentágono Irregular"
+        return "Pentágono Regular"
 
     @classmethod
     def __str__(cls):
-        return f"Pentagono"
+        return f"Pentágono"
 
 
 class Hexagono(Poligono):
@@ -176,13 +176,13 @@ class Hexagono(Poligono):
 
     def tipo(self):
         if self.verifica_convexo() == "concavo":
-            return "Hexagono Concavo"
+            return "Hexágono Côncavo"
         for i in range(len(self.lados())):
             if self.lados()[0] != self.lados()[i]:
-                return "Hexagono Irregular"
-        return "Hexagono Regular"
+                return "Hexágono Irregular"
+        return "Hexágono Regular"
 
     @classmethod
     def __str__(cls):
-        return f"Hexagono"
+        return f"Hexágono"
 
