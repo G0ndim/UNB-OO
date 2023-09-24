@@ -11,41 +11,57 @@ Classe Ponto():
 -Atributo numero de pontos = num
 .Função Localização
   retorna "(x1, y1), (x2, y2), ..., (xnum, ynum)"
+.Função Lados
+  retorna o tamanho dos lados formados pelos pontos
 
 
 Classe Poligono(Ponto):
--Construtor Poligono(Vertices)
+-Construtor Poligono(Vértices)
 .Função Área
-  retorna a area do Poligono
+  retorna a área do Poligono
 .Função Perímetro
-  retorna o perimentro do Poligono
+  retorna o perímentro do Poligono
+.Função ÂngulosInternos
+  retorna os ângulos internos do Poligono
 .Funcao Tipo
-  retorna o tipo do poligono "(triangulo, quadrado, hexagono...)"
+  retorna o tipo do poligono "(triângulo, quadrilátero, hexagono...)"
 
 
-Classe Triangulo(Poligono):
--Construtor(Vertices)
+Classe Triângulo(Poligono):
+-Construtor(Vértices)
 .Função Área
-  retorna a area do Poligono
+  retorna a área do Poligono
 .Função Perímetro
-  retorna o perimentro do Poligono
+  retorna o perímentro do Poligono
 .Funcao Tipo
-  retorna o tipo do triangulo (Equilatero, Escaleno, Retangulo...)
+  retorna o tipo do triangulo (Equilátero, Escaleno, Retângulo...)
 
-Classe Quadrilatero(Poligono):
--Construtor(Vertices)
-.Função Área
-  retorna a area do quadrilatero
-.Função Perímetro
-  retorna o perimentro do quadrilatero
-.Funcao Tipo
-  retorna o tipo do qudrilatero (Quadrado, Retangulo, Losangulo, Trapezio, Paralelograma)
 
-Classe Pentagono(Poligono):
-  -Construtor(Vertices)
+Classe Quadrilátero(Poligono):
+-Construtor(Vértices)
 .Função Área
-  retorna a area do Pentagono
+  retorna a área do quadrilátero
 .Função Perímetro
-  retorna o perimentro do Pentagono
+  retorna o perímentro do quadrilátero
 .Funcao Tipo
-  retorna o tipo do Pentagono (Regular, Irregular)
+  retorna o tipo do quadrílatero (Quadrado, Retângulo, Losango, Trapézio, Paralelogramo)
+
+
+Classe Pentágono(Poligono):
+  -Construtor(Vértices)
+.Função Área
+  retorna a área do Pentágono
+.Função Perímetro
+  retorna o perímentro do Pentágono
+.Funcao Tipo
+  retorna o tipo do Pentágono (Regular, Irregular, Côncavo)
+
+
+Classe Hexagono(Poligono):
+  -Construtor(Vértices)
+.Função Área
+  retorna a área do Hexagono
+.Função Perímetro
+  retorna o perímentro do Hexagono
+.Funcao Tipo
+  retorna o tipo do Hexagono (Regular, Irregular, Côncavo)
