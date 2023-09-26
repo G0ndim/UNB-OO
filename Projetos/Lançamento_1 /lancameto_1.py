@@ -25,14 +25,3 @@ while True:
     if input("Deseja continuar?(s/n): ")[0] in "Nn":
         print("Desligando calculadora")
         break
-
-
-    """
-    menu_inicial(figuras)
-
-    # Escolha do usuario entre os indices do menu
-    opcao = int(input(f"\033[36m>>(n): "))
-    print(f"\033[32mOpcao selecionada: \033[36m{figuras[opcao].__str__()}")
-    print(f"\033[32m{'---' * 15}")
-
-    """
