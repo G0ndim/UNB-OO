@@ -15,7 +15,7 @@ def limpa_terminal():
 def menu_inicial(figuras):
 
     print(f"\033[32m{'=-=' * 15}")
-    print(f"\033[32m{'Calculadora Geometrica Bidimensional':^45}".upper())
+    print(f"\033[32m{'Calculadora Geométrica Bidimensional':^45}".upper())
     print(f"\033[32m{'=-=' * 15}")
     print(f"\033[32m{'Escolha uma das opções':^45}")
     for i, j in figuras.items():
@@ -31,9 +31,9 @@ def menu_selecao(figuras):
         opcao = int(input(f"\033[36m>>(n): "))
         limpa_terminal()
         print(f"\033[32m{'=-=' * 15}")
-        print(f"\033[32m{'Calculadora Geometrica Bidimensional':^45}".upper())
+        print(f"\033[32m{'Calculadora Geométrica Bidimensional':^45}".upper())
         print(f"\033[32m{'=-=' * 15}")
-        print(f"\033[32m{'Opçao escolhida':^45}")
+        print(f"\033[32m{'Opção escolhida':^45}")
         for i, j in figuras.items():
             if i == opcao:
                 a = f"\033[36m{i}. \033[7;32m{j.__str__()}\033[0m"
@@ -41,7 +41,7 @@ def menu_selecao(figuras):
                 a = f"\033[36m{i}. \033[32m{j.__str__()}"
             print(f"\033[32m{a:<10}")
         print(f"\033[32m{'---' * 15}")
-        if input("Deseja selecionar outra opcao?(s/n): ") in "Nn":
+        if input("Deseja selecionar outra opção?(s/n): ") in "Nn":
             limpa_terminal()
             print(f"\033[32m{'=-=' * 15}")
             print(f"\033[32m{figuras[opcao].__str__():^45}".upper())
@@ -104,7 +104,7 @@ def coletor_vertices(num1, num_f, lista_x, lista_y, figuras, opcao):
         print(f"\033[32m{'=-=' * 15}")
         print(f"\033[32m{figuras[opcao].__str__():^45}".upper())
         print(f"\033[32m{'=-=' * 15}")
-        print(f"\033[32mPreencha as coordenadas dos \033[36m{num_f[0]} \033[32mvertices a seguir: ")
+        print(f"\033[32mPreencha as coordenadas dos \033[36m{num_f[0]} \033[32mvértices a seguir: ")
         print()
         counter = 0
         for j in range(len(vertices)):
@@ -164,7 +164,7 @@ def troca_vertice(classe, figuras, opcao):
                 print(f"\033[32m{'=-=' * 15}")
                 print(f"\033[32m{figuras[opcao].__str__():^45}".upper())
                 print(f"\033[32m{'=-=' * 15}")
-                print(f"\033[32m{'Opcao selecionada':^45}")
+                print(f"\033[32m{'Opção selecionada':^45}")
                 for i, j in classe.localizacoes().items():
                     if i == posicao:
                         a = f"\033[36m{i}. \033[7;32m{j}\033[0m"
@@ -172,7 +172,7 @@ def troca_vertice(classe, figuras, opcao):
                         a = f"\033[36m{i}. \033[32m{j}"
                     print(f"\033[32m{a:<10}")
                 print(f"\033[32m{'---' * 15}")
-                if input("Deseja selecionar outra opcao?(s/n): ") in "Nn":
+                if input("Deseja selecionar outra opção?(s/n): ") in "Nn":
                     break
 
             for i in range(2):
