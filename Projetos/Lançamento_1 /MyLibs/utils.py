@@ -184,24 +184,43 @@ def troca_vertice(classe, figuras, opcao):
                 if input("Deseja selecionar outra opção?(s/n): ") in "Nn":
                     break
 
-            for i in range(2):
+            # trocar a partir daqui
+            count = 0
+            x_nov = "x"
+            y_nov = "y"
+            for j in range(2):
                 limpa_terminal()
                 print(f"\033[32m{'=-=' * 15}")
                 print(f"\033[32m{figuras[opcao].__str__():^45}".upper())
                 print(f"\033[32m{'=-=' * 15}")
                 print(f"\033[32m{'Digite os novos valores':^45}")
-                if i == 0:
-                    a = f"(\033[7;32m{classe.localizacoes()[posicao][0]}\033[0;32m, {classe.localizacoes()[posicao][1]})"
-                    print(f"{a:^45}")
+                for k, l in classe.localizacoes().items():
+                    if k == posicao:
+                        if j == 0:
+                            a = f"\033[36m{k}. {l}   --->   (\033[7m{x_nov}\033[0;36m, {y_nov})"
+                        else:
+                            a = f"\033[36m{k}. {l}   --->   ({x_nov}, \033[7m{y_nov}\033[0;36m)\033[0;32m"
+                    else:
+                        a = f"\033[36m{k}. \033[32m{l}"
+                    print(f"\033[32m{a:<10}")
+                if j == 0:
                     print(f"\033[32m{'---' * 15}")
-                    x_nov = float(input(f"\033[36m>>(n): "))
+                    x_nov = float(input(f"\033[36m>>(x{posicao}): "))
                 else:
-                    a = f"({classe.localizacoes()[posicao][0]}, \033[7;32m{classe.localizacoes()[posicao][1]}\033[0;32m)"
-                    print(f"{a:^45}")
                     print(f"\033[32m{'---' * 15}")
-                    y_nov = float(input(f"\033[36m>>(n): "))
-
-            print(f"\033[0;32m({classe.crd_x[posicao - 1]}, {classe.crd_y[posicao - 1]})  --->  ({x_nov}, {y_nov})")
+                    y_nov = float(input(f"\033[36m>>(y{posicao}): "))
+            limpa_terminal()
+            print(f"\033[32m{'=-=' * 15}")
+            print(f"\033[32m{figuras[opcao].__str__():^45}".upper())
+            print(f"\033[32m{'=-=' * 15}")
+            print(f"\033[32m{'Coordenadas modificadas':^45}")
+            for m, n in classe.localizacoes().items():
+                if m == posicao:
+                    b = f"\033[36m{m}. {n}   --->   ({x_nov}, {y_nov})"
+                else:
+                    b = f"\033[36m{m}. \033[32m{n}"
+                print(f"\033[32m{b:<10}")
+            print(f"{'---' * 15}")
             resposta = input("Quer manter as alterações?(s/n): ")
             if resposta.strip()[0] in 'Ss':
                 classe.troca_coordenada(posicao - 1, x_nov, y_nov)
@@ -213,10 +232,10 @@ def troca_vertice(classe, figuras, opcao):
 
 def resultado(classe, figuras, opcao):
     menu_vertices(classe, figuras, opcao)
+    print(f"Classificação: {classe.tipo()}")
     print(f"Àrea: {classe.area()}")
     print(f"Perímetro: {classe.perimetro()}")
     print(f"Ângulos internos: {classe.angulos_internos()}")
-    print(classe.tipo())
     pass
 
 # (6.0, 0.0), 2: (0.0, 0.0), 3: (8.0, 4.0), 4: (2.0, 4.0)
