@@ -108,14 +108,22 @@ def coletor_vertices(num1, num_f, lista_x, lista_y, figuras, opcao):
         print()
         counter = 0
         for j in range(len(vertices)):
+            print(f"\033[0;36m{j+1}.\033[0;32m (", end='')
             for k in range(2):
                 if counter == i:
-                    print(f"\033[7;36m{vertices[j][k]}\033[0m", end=' ')
+                    if k == 0:
+                        print(f"\033[7;36m{vertices[j][k]}\033[0;32m", end=', ')
+                    else:
+                        print(f"\033[7;36m{vertices[j][k]}\033[0;32m", end='')
                     a, b = j, k
                 else:
-                    print(f"\033[32m{vertices[j][k]}", end=' ')
+                    if k == 0:
+                        print(f"\033[32m{vertices[j][k]}", end=', ')
+                    else:
+                        print(f"\033[32m{vertices[j][k]}", end='')
                 counter += 1
-        print()
+            print(")")
+        print(f"{'---' * 15}")
         coordenada = float(input(f"\033[36m>>({vertices[a][b]}): "))
         vertices[a][b] = coordenada
         if b == 0:
@@ -143,6 +151,7 @@ def menu_vertices(classe, figuras, opcao):
         a = f"\033[36m{i}. \033[32m{j.__str__()}"
         print(f"\033[32m{a:<10}")
     print(f"\033[32m{'---' * 15}")
+    pass
 
 
 def troca_vertice(classe, figuras, opcao):
@@ -202,11 +211,11 @@ def troca_vertice(classe, figuras, opcao):
     pass
 
 
-def resultado(classe):
-    print(f"Area: {classe.area()}")
+def resultado(classe, figuras, opcao):
+    menu_vertices(classe, figuras, opcao)
+    print(f"Àrea: {classe.area()}")
     print(f"Perímetro: {classe.perimetro()}")
-    print(f"Angs: {classe.angulos_internos()}")
-    # print(classe.verifica_convexo())
+    print(f"Ângulos internos: {classe.angulos_internos()}")
     print(classe.tipo())
     pass
 
