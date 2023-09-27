@@ -22,6 +22,6 @@ while True:
     # Resultado final
     resultado(forma, figuras, opcao)
     print(f"\033[32m{'---' * 15}")
-    if input("Deseja continuar?(s/n): ")[0] in "Nn":
+    if input("Deseja continuar?\033[36m(s/n): ")[0] in "Nn":
         print("Desligando calculadora")
         break
