@@ -187,7 +187,6 @@ def troca_vertice(classe, figuras, opcao):
                 if input("Deseja selecionar outra opção?\033[36m(s/n): ") in "Nn":
                     break
 
-            # trocar a partir daqui
             count = 0
             x_nov = "x"
             y_nov = "y"
@@ -246,4 +245,3 @@ def resultado(classe, figuras, opcao):
             print(f"{j}°", end=', ')
     pass
 
-# (6.0, 0.0), 2: (0.0, 0.0), 3: (8.0, 4.0), 4: (2.0, 4.0)
