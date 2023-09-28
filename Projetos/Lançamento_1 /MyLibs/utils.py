@@ -127,7 +127,7 @@ def coletor_vertices(num1, num_f, lista_x, lista_y, figuras, opcao):
                 counter += 1
             print(")")
         print(f"{'---' * 15}")
-        coordenada = float(input(f"\033[36m>>({vertices[a][b]}): "))
+        coordenada = float(eval(input(f"\033[36m>>({vertices[a][b]}): ")))
         vertices[a][b] = coordenada
         if b == 0:
             x.append(vertices[a][b])
@@ -208,10 +208,10 @@ def troca_vertice(classe, figuras, opcao):
                     print(f"\033[32m{a:<10}")
                 if j == 0:
                     print(f"\033[32m{'---' * 15}")
-                    x_nov = float(input(f"\033[36m>>(x{posicao}): "))
+                    x_nov = float(eval(input(f"\033[36m>>(x{posicao}): ")))
                 else:
                     print(f"\033[32m{'---' * 15}")
-                    y_nov = float(input(f"\033[36m>>(y{posicao}): "))
+                    y_nov = float(eval(input(f"\033[36m>>(y{posicao}): ")))
             limpa_terminal()
             print(f"\033[32m{'=-=' * 15}")
             print(f"\033[32m{figuras[opcao].__str__():^45}".upper())
