@@ -74,7 +74,10 @@ def organizador_de_lista(lista_x, lista_y):
     # Organiza as coordenadas em uma lista ordenada com relação ao ângulo formado
     # entre elas e um ponto no centro do poligono, de forma anti-horária.
     menor = min(lista, key=lambda x: (x[1], x[0]))
+    lista.pop(lista.index(menor))
+
     vertices = sorted(lista, key=lambda x: atan2(x[1] - menor[1], x[0] - menor[0]) + 2 * pi)
+    vertices.insert(0, menor)
 
     # Retorna os valores de x e y para suas respectivas lista, ja organizados.
     lista_x.clear()
@@ -233,9 +236,14 @@ def troca_vertice(classe, figuras, opcao):
 def resultado(classe, figuras, opcao):
     menu_vertices(classe, figuras, opcao)
     print(f"Classificação: {classe.tipo()}")
-    print(f"Àrea: {classe.area()}")
-    print(f"Perímetro: {classe.perimetro()}")
-    print(f"Ângulos internos: {classe.angulos_internos()}")
+    print(f"Àrea: {classe.area(): .2f}")
+    print(f"Perímetro: {classe.perimetro(): .2f}")
+    print(f"Ângulos internos: ", end='')
+    for i, j in enumerate(classe.angulos_internos()):
+        if i == len(classe.angulos_internos()) - 1:
+            print(f"{j}°.")
+        else:
+            print(f"{j}°", end=', ')
     pass
 
 # (6.0, 0.0), 2: (0.0, 0.0), 3: (8.0, 4.0), 4: (2.0, 4.0)
