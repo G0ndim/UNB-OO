@@ -22,6 +22,21 @@ Desenvolver habilidades práticas para a implementação de sistemas de software
 Projetar um pequeno universo interativo dentro do qual seja possível registrar formas geométricas bidimensionais
 úteis para verificações e cálculos simples.
 #### Programa:
+***Arquivos***
+* calcGeo.py: Arquivo responsável pela execução da calculadora
+* figurasGeometricas.py: Arquivo com as classes das figuras geométricas
+* utils.py: Arquivo com os utilitários usados para a configuração dos menus de seleção e organização de listas
+* Planejamento.txt: Planejamento em pseudo-código das classes
+* casosTeste.txt: Arquivo com entradas para teste e suas respectivas saídas esperadas
+
+***Execução***
+
+O programa apenas utiliza de biblitecas nativas do python3 sendo precisa apenas a instalacão desse, portanto para rodar o código
+é necessário, estando dentro do diretório onde o aquivo calcGeo.py está localizado, executar o seguinte comando:
+```
+$ python3 calcGeo.py
+```
+
 Sua execução abre um menu com as figuras disponíveis para realização dos cálculos, podendo selecioná-las
 a partir do número em azul a sua esquerda (1-5)
 
@@ -43,9 +58,4 @@ Por fim é mostrado o resultado dos cálculos
 
 ![Imagem 5](imagesRM/image_6.png)
 
-#### Arquivos:
-* main.py: Arquivo responsável pela execução do menu de seleção da calculadora
-* figurasGeometricas.py: Arquivo com as classes das figuras geométricas
-* utils.py: Arquivo com os utilitários usados para a configuração dos menus de seleção e organização de listas
-* Planejamento.txt: Planejamento em pseudo-código das classes
-* casosTeste.txt: Arquivo com entradas para teste e suas respectivas saídas esperadas
+
