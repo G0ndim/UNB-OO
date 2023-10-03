@@ -61,15 +61,9 @@ def organizador_de_lista(lista_x, lista_y):
     :return:
     """
     from math import atan2, pi
-    lista = []
 
     # [x1, x2, x3 ...] , [y1, y2, y3...]    --->   [[x1, y1], [x2, y2], ...]
-    for i in range(len(lista_x)):
-        lis = []
-        lis.append(lista_x[i])
-        lis.append(lista_y[i])
-        lista.append(lis)
-        del lis
+    lista = list(zip(lista_x, lista_y))
 
     # Organiza as coordenadas em uma lista ordenada com relação ao ângulo formado
     # entre elas e um ponto no centro do poligono, de forma anti-horária.
@@ -235,6 +229,12 @@ def troca_vertice(classe, figuras, opcao):
 def resultado(classe, figuras, opcao):
     menu_vertices(classe, figuras, opcao)
     print(f"Classificação: {classe.tipo()}")
+    print(f"Tamanho dos lados: ", end='')
+    for i, j in enumerate(classe.lados()):
+        if i == len(classe.lados()) - 1:
+            print(f"{j:.2f}")
+        else:
+            print(f"{j:.2f}", end=', ')
     print(f"Àrea: {classe.area(): .2f}")
     print(f"Perímetro: {classe.perimetro(): .2f}")
     print(f"Ângulos internos: ", end='')
