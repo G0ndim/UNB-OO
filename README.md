@@ -31,8 +31,8 @@ Projetar um pequeno universo interativo dentro do qual seja possível registrar 
 
 ***Execução***
 
-O programa apenas utiliza de biblitecas nativas do python3 sendo precisa apenas a instalacão desse, portanto para rodar o código
-é necessário, estando dentro do diretório onde o aquivo calcGeo.py está localizado, executar o seguinte comando:
+O programa apenas utiliza de biblitecas nativas do python3 sendo preciso apenas a instalacão desse, portanto para rodar o código
+é necessário, estando dentro do diretório onde o arquivo calcGeo.py está localizado, executar o seguinte comando:
 ```
 $ python3 calcGeo.py
 ```
