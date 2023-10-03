@@ -23,11 +23,11 @@ Projetar um pequeno universo interativo dentro do qual seja possível registrar 
 úteis para verificações e cálculos simples.
 #### Programa:
 ***Arquivos***
-* calcGeo.py: Arquivo responsável pela execução da calculadora
-* figurasGeometricas.py: Arquivo com as classes das figuras geométricas
-* utils.py: Arquivo com os utilitários usados para a configuração dos menus de seleção e organização de listas
-* Planejamento.txt: Planejamento em pseudo-código das classes
-* casosTeste.txt: Arquivo com entradas para teste e suas respectivas saídas esperadas
+* [calcGeo.py](Projetos/calculadoraGeo/calcGeo.py): Arquivo responsável pela execução da calculadora
+* [figurasGeometricas.py](Projetos/calculadoraGeo/MyLibs/figurasGeometricas.py): Arquivo com as classes das figuras geométricas
+* [utils.py](Projetos/calculadoraGeo/MyLibs/utils.py): Arquivo com os utilitários usados para a configuração dos menus de seleção e organização de listas
+* [Planejamento.txt](Projetos/calculadoraGeo/Planejamento.txt): Planejamento em pseudo-código das classes
+* [casosTeste.txt](Projetos/calculadoraGeo/casosTeste.txt): Arquivo com entradas para teste e suas respectivas saídas esperadas
 
 ***Execução***
 
@@ -47,6 +47,7 @@ Recebendo o número, o programa realça a opção selecionada e solicita a confi
 ![Imagem 2](imagesRM/image_2.png)
 
 Após a confirmação, é exibido um menu para o preenchimento das coordenadas, grifando a posição referente a entrada de dados
+
 ![Imagem 3](imagesRM/image_3.png)
 
 Com as coordenadas completas, é perguntado se o usuário deseja trocar algum vértice (s/n), sua escolha podendo levá-lo a
