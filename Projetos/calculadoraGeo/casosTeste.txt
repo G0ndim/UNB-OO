@@ -1,4 +1,4 @@
-Triangulo:
+Triângulo:
 -Equilátero ->	(0,0), (4,0), (2,12**(1/2))
 -Isóceles   ->	(2,2), (6,2), (4,6)	
 -Retângulo  ->	(1,1), (5,1), (1,4)
