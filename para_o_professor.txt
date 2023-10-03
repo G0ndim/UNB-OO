@@ -4,4 +4,4 @@ Lançamento 1:
 - UNB-OO/Projetos/calculadoraGeo/ -> "Planejamento.txt"
 Lançamento 2: 
 - UNB-OO/Projetos/calculadoraGeo/ -> "calcGeo.py" (programa principal, executável)
-- UNB-OO/Projetos/calculadoraGeo/Mylibs/ -> "figurasGeometricas.py" (arquivo com as classes do psudocódigo)
+- UNB-OO/Projetos/calculadoraGeo/Mylibs/ -> "figurasGeometricas.py" (arquivo com as classes do pseudocódigo)
