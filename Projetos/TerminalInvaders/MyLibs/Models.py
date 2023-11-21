@@ -40,6 +40,31 @@ class Bala:
         self.skin = '../public/bullet_test.png'
         self.bullet_image = pygame.image.load(self.skin)
         self.bullet_rect = self.bullet_image.get_rect()
+        self.flag = False
+        self.pos_x = int()
+        self.pos_y = int()
+        self.mouse_pos = tuple()
+        self.ang = int()
+        self.collision = False
+
+    def movimento(self, tela, player_x, player_y):
+        if not self.flag:
+            self.pos_x, self.pos_y = player_x, player_y
+            self.mouse_pos = pygame.mouse.get_pos()
+            tela.blit(self.bullet_image, (self.pos_x, self.pos_y))
+            self.bullet_rect = self.bullet_image.get_rect()
+            self.flag = True
+            self.ang = atan2(self.mouse_pos[1] - self.pos_y, self.mouse_pos[0] - self.pos_x)
+        self.pos_x += self.velocidade * cos(self.ang)
+        self.pos_y += self.velocidade * sin(self.ang)
+
+        if self.collision or self.pos_x >= 1080 or self.pos_y >= 1080 or self.pos_x <= 0 or self.pos_x <= 0:
+            self.pos_x, self.pos_y = player_x, player_y
+            self.mouse_pos = pygame.mouse.get_pos()
+            self.ang = atan2(self.mouse_pos[1] - self.pos_y, self.mouse_pos[0] - self.pos_x)
+
+        tela.blit(self.bullet_image, (self.pos_x, self.pos_y))
+        self.bullet_rect = self.bullet_image.get_rect()
 
 
 class Arma:
@@ -103,3 +128,7 @@ class Zumbi(Inimigo):
         self.enemy_skin = '../public/zombie_test.png'
         self.enemy_image = pygame.image.load(self.enemy_skin)
         self.enemy_rect = self.enemy_image.get_rect()
+
+
+if __name__ == '__main__':
+    print(f'{pygame.mouse.get_pos()}')
