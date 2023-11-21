@@ -10,33 +10,19 @@ class Display:
         self._y = comprimento
         self._name = nome
 
-    def screen(self, player):
+    def screen(self, player, enemy):
         tela = pygame.display.set_mode((self._x, self._y))
-        pygame.display.set_caption(f'{self._name}')  # nome da janela
-        clock = pygame.time.Clock()  # tempo do jogo
-        # jogador = pg.image.load(player.player_skin)
-        player_image = pygame.image.load(player.player_skin)
-        player_image = pygame.transform.scale(player_image, (71, 97))
-        tmh_x = self._x / 2
-        tmh_y = self._y / 2
-        player_rect = player_image.get_rect()
+        pygame.display.set_caption(f'{self._name}')
+        clock = pygame.time.Clock()
+        player.pos_x = self._x / 2
+        player.pos_y = self._y / 2
 
         while True:
-            keys = pygame.key.get_pressed()
-            speed = player.velocidade
-            tela.fill('white')
-
-            if keys[pygame.K_w] and tmh_y > 0:
-                tmh_y -= speed
-            if keys[pygame.K_s] and tmh_y < 1080 - player_rect.height:
-                tmh_y += speed
-            if keys[pygame.K_a] and tmh_x > 0:
-                tmh_x -= speed
-            if keys[pygame.K_d] and tmh_x < 1080 - player_rect.width:
-                tmh_x += speed
-
-            tela.blit(player_image, (tmh_x, tmh_y))
-            pg.display.update()
+            tela.fill('blue')
+            player.movimentar(tela)
+            enemy.spawn(self._x, self._y, tela)
+            enemy.movimento(player.pos_x, player.pos_y, tela)
+            pygame.display.update()
             clock.tick(60)
 
             for event in pygame.event.get():
@@ -50,5 +36,6 @@ class Display:
 if __name__ == '__main__':
     name = 'Jogo :)'
     J = Jogador(15, 15, 15)
+    N = Zumbi(5, 5, 5, 5)
     teste = Display(1080, 1080, name)
-    teste.screen(J)
+    teste.screen(J, N)
