@@ -76,16 +76,17 @@ while True:
 """
 import pygame
 from math import atan2, cos, sin
+from random import randint
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.pos_x = 0
-        self.pos_y = 0
+        self.pos_x = 540
+        self.pos_y = 540
         self.player_image = pygame.image.load('./public/player/player_left_pistol.png')
         self.player_rect = self.player_image.get_rect()
-        self.velocidade = 5
+        self.velocidade = 1
 
     def movimentar(self, tela):
         keys = pygame.key.get_pressed()
@@ -153,13 +154,57 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
 
+class Inimigo(pygame.sprite.Sprite):
+    def __init__(self, velocidade, x_tela, y_tela):
+        super().__init__()
+        self.velocidade = velocidade
+        self.pos_x = int()
+        self.pos_y = int()
+        self.enemy_skin = './public/enemy/enemy_error.png'
+        self.enemy_image = pygame.image.load(self.enemy_skin)
+        self.enemy_rect = self.enemy_image.get_rect()
+        self.spawn_condition = False
+        self.x_tela = x_tela
+        self.y_tela = y_tela
+
+    def spawn(self, screen, x_player, y_player):
+        if not self.spawn_condition:
+            x_inicial = randint(0, 1)
+            y_inicial = randint(0, 1)
+            if x_inicial:
+                self.pos_x = randint(self.x_tela, self.x_tela + 100)
+            else:
+                self.pos_x = randint(-100, 0)
+            if y_inicial:
+                self.pos_y = randint(self.y_tela, self.y_tela + 100)
+            else:
+                self.pos_y = randint(-100, 0)
+            self.spawn_condition = True
+        else:
+            ang = atan2(y_player - self.pos_y, x_player - self.pos_x)
+            self.pos_x += self.velocidade * cos(ang)
+            self.pos_y += self.velocidade * sin(ang)
+
+        screen.blit(self.enemy_image, (self.pos_x, self.pos_y))
+        self.enemy_rect = self.enemy_image.get_rect(topleft=(self.pos_x, self.pos_y))
+
+    def estado(self, bullet_rect):
+        if self.enemy_rect.colliderect(bullet_rect):
+            self.kill()
+
+
 if __name__ == '__main__':
     pygame.init()
     tela = pygame.display.set_mode((1080, 1080))
     pygame.display.set_caption(f'jogu')
     clock = pygame.time.Clock()
     p1 = Player()
+
     bullet_group = pygame.sprite.Group()
+    enemy_group = pygame.sprite.Group()
+    for i in range(5):
+        p2 = Inimigo(1, 1080, 1080)
+        enemy_group.add(p2)
 
     while True:
         for event in pygame.event.get():
@@ -171,11 +216,15 @@ if __name__ == '__main__':
 
         tela.fill((48, 10, 36))
         p1.movimentar(tela)
+        for inimigo in enemy_group.sprites():
+            inimigo.spawn(tela, p1.pos_x, p1.pos_y)
         bullet_group.draw(tela)
         bullet_group.update()
+        for inimigo in enemy_group.sprites():
+            for bullet in bullet_group.sprites():
+                inimigo.estado(bullet.rect)
         pygame.display.update()
         clock.tick(60)
-
 
 
 """
