@@ -35,23 +35,23 @@ class Jogador:
         # Movimento do personagem na direcao do mouse
         if self.player_rect.topleft[0] <= mouse_pos[0] <= self.player_rect.topright[0]:
             if mouse_pos[1] <= self.pos_y:
-                self.player_image = pygame.image.load('./public/player/player_top_pistol.png')
+                self.player_image = pygame.image.load('../public/player/player_top_pistol.png')
             if mouse_pos[1] >= self.pos_y:
-                self.player_image = pygame.image.load('./public/player/player_bottom_pistol.png')
+                self.player_image = pygame.image.load('../public/player/player_bottom_pistol.png')
         elif mouse_pos[0] < self.player_rect.topleft[0]:
             if mouse_pos[1] <= self.player_rect.topleft[1]:
-                self.player_image = pygame.image.load('./public/player/player_top_left_pistol.png')
+                self.player_image = pygame.image.load('../public/player/player_top_left_pistol.png')
             if mouse_pos[1] >= self.player_rect.bottomleft[1]:
-                self.player_image = pygame.image.load('./public/player/player_bottom_left_pistol.png')
+                self.player_image = pygame.image.load('../public/player/player_bottom_left_pistol.png')
             if self.player_rect.bottomleft[1] >= mouse_pos[1] >= self.player_rect.topleft[1]:
-                self.player_image = pygame.image.load('./public/player/player_left_pistol.png')
+                self.player_image = pygame.image.load('../public/player/player_left_pistol.png')
         elif mouse_pos[0] > self.player_rect.topright[0]:
             if mouse_pos[1] < self.player_rect.topright[1]:
-                self.player_image = pygame.image.load('./public/player/player_top_right_pistol.png')
+                self.player_image = pygame.image.load('../public/player/player_top_right_pistol.png')
             if mouse_pos[1] > self.player_rect.bottomright[1]:
-                self.player_image = pygame.image.load('./public/player/player_bottom_right_pistol.png')
+                self.player_image = pygame.image.load('../public/player/player_bottom_right_pistol.png')
             if self.player_rect.bottomright[1] >= mouse_pos[1] >= self.player_rect.topright[1]:
-                self.player_image = pygame.image.load('./public/player/player_right_pistol.png')
+                self.player_image = pygame.image.load('../public/player/player_right_pistol.png')
 
         tela.blit(self.player_image, (self.pos_x, self.pos_y))
         self.player_rect = self.player_image.get_rect(topleft=(self.pos_x, self.pos_y))
