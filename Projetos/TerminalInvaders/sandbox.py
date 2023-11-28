@@ -73,3 +73,110 @@ while True:
             pygame.quit()
             exit()
 
+"""
+import pygame
+from math import atan2, cos, sin
+
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.pos_x = 0
+        self.pos_y = 0
+        self.player_image = pygame.image.load('./public/player/player_left_pistol.png')
+        self.player_rect = self.player_image.get_rect()
+        self.velocidade = 5
+
+    def movimentar(self, tela):
+        keys = pygame.key.get_pressed()
+        mouse_pos = pygame.mouse.get_pos()
+
+        # Movimento do jogador na tela
+        if keys[pygame.K_w] and self.pos_y > 0:
+            self.pos_y -= self.velocidade
+        if keys[pygame.K_s] and self.pos_y < 1080 - self.player_rect.height:
+            self.pos_y += self.velocidade
+        if keys[pygame.K_a] and self.pos_x > 0:
+            self.pos_x -= self.velocidade
+        if keys[pygame.K_d] and self.pos_x < 1080 - self.player_rect.width:
+            self.pos_x += self.velocidade
+
+        # Movimento do personagem na direcao do mouse
+        if self.player_rect.topleft[0] <= mouse_pos[0] <= self.player_rect.topright[0]:
+            if mouse_pos[1] <= self.pos_y:
+                self.player_image = pygame.image.load('./public/player/player_top_pistol.png')
+            if mouse_pos[1] >= self.pos_y:
+                self.player_image = pygame.image.load('./public/player/player_bottom_pistol.png')
+        elif mouse_pos[0] < self.player_rect.topleft[0]:
+            if mouse_pos[1] <= self.player_rect.topleft[1]:
+                self.player_image = pygame.image.load('./public/player/player_top_left_pistol.png')
+            if mouse_pos[1] >= self.player_rect.bottomleft[1]:
+                self.player_image = pygame.image.load('./public/player/player_bottom_left_pistol.png')
+            if self.player_rect.bottomleft[1] >= mouse_pos[1] >= self.player_rect.topleft[1]:
+                self.player_image = pygame.image.load('./public/player/player_left_pistol.png')
+        elif mouse_pos[0] > self.player_rect.topright[0]:
+            if mouse_pos[1] < self.player_rect.topright[1]:
+                self.player_image = pygame.image.load('./public/player/player_top_right_pistol.png')
+            if mouse_pos[1] > self.player_rect.bottomright[1]:
+                self.player_image = pygame.image.load('./public/player/player_bottom_right_pistol.png')
+            if self.player_rect.bottomright[1] >= mouse_pos[1] >= self.player_rect.topright[1]:
+                self.player_image = pygame.image.load('./public/player/player_right_pistol.png')
+
+        tela.blit(self.player_image, (self.pos_x, self.pos_y))
+        self.player_rect = self.player_image.get_rect(topleft=(self.pos_x, self.pos_y))
+
+    def create_bullet(self):
+        return Bullet(self.pos_x, self.pos_y)
+
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__()
+        self.image = pygame.Surface((3, 3))
+        self.image.fill((255, 0, 0))
+        self.pos_y = pos_y
+        self.pos_x = pos_x
+        self.rect = self.image.get_rect(center=(pos_x, pos_y))
+        self.ang = int()
+        self.mouse_pos = tuple()
+        self.flag = False
+
+    def update(self):
+        if not self.flag:
+            self.mouse_pos = pygame.mouse.get_pos()
+            self.flag = True
+        self.ang = atan2(self.mouse_pos[1] - self.pos_y, self.mouse_pos[0] - self.pos_x)
+        self.rect.x += 5 * cos(self.ang)
+        self.rect.y += 5 * sin(self.ang)
+
+        if self.rect.x >= 1080 or self.rect.x <= 0 or self.rect.y >= 1080 or self.rect.y <= 0:
+            self.kill()
+
+
+if __name__ == '__main__':
+    pygame.init()
+    tela = pygame.display.set_mode((1080, 1080))
+    pygame.display.set_caption(f'jogu')
+    clock = pygame.time.Clock()
+    p1 = Player()
+    bullet_group = pygame.sprite.Group()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                bullet_group.add(p1.create_bullet())
+
+        tela.fill((48, 10, 36))
+        p1.movimentar(tela)
+        bullet_group.draw(tela)
+        bullet_group.update()
+        pygame.display.update()
+        clock.tick(60)
+
+
+
+"""
+
