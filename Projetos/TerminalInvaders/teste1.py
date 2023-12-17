@@ -6,11 +6,25 @@ from random import randint
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        self.player_health = 5
         self.pos_x = 540
         self.pos_y = 540
-        self.player_image = pygame.image.load('./public/player/player_left_pistol.png')
+        self.weapons = [0, Pistol(), Shotguun(), Sniper()]
+        self.weapon_number = 1
+        self.player_skin = './public/player_test.png'
+        self.player_image = pygame.image.load(self.player_skin)
         self.player_rect = self.player_image.get_rect()
-        self.velocidade = 1
+        self.velocidade = 3
+        self.invulnerabilidade = 0
+
+    def change_weapon(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_2]:
+            self.weapon_number = 1
+        if keys[pygame.K_3]:
+            self.weapon_number = 2
+        if keys[pygame.K_4]:
+            self.weapon_number = 3
 
     def movimentar(self):
         # Movimento do jogador na tela
@@ -27,34 +41,109 @@ class Player(pygame.sprite.Sprite):
     def direction_animation(self):
         # Movimento do personagem na direcao do mouse
         mouse_pos = pygame.mouse.get_pos()
+        weapons = [0, self.weapons[1].skin, self.weapons[2].skin, self.weapons[3].skin]
         if self.player_rect.topleft[0] <= mouse_pos[0] <= self.player_rect.topright[0]:
             if mouse_pos[1] <= self.pos_y:
-                self.player_image = pygame.image.load('./public/player/player_top_pistol.png')
+                self.player_skin = weapons[self.weapon_number][0]
+                self.player_image = pygame.image.load(self.player_skin)
             if mouse_pos[1] >= self.pos_y:
-                self.player_image = pygame.image.load('./public/player/player_bottom_pistol.png')
+                self.player_skin = weapons[self.weapon_number][1]
+                self.player_image = pygame.image.load(self.player_skin)
         elif mouse_pos[0] < self.player_rect.topleft[0]:
             if mouse_pos[1] <= self.player_rect.topleft[1]:
-                self.player_image = pygame.image.load('./public/player/player_top_left_pistol.png')
+                self.player_skin = weapons[self.weapon_number][2]
+                self.player_image = pygame.image.load(self.player_skin)
             if mouse_pos[1] >= self.player_rect.bottomleft[1]:
-                self.player_image = pygame.image.load('./public/player/player_bottom_left_pistol.png')
+                self.player_skin = weapons[self.weapon_number][3]
+                self.player_image = pygame.image.load(self.player_skin)
             if self.player_rect.bottomleft[1] >= mouse_pos[1] >= self.player_rect.topleft[1]:
-                self.player_image = pygame.image.load('./public/player/player_left_pistol.png')
+                self.player_skin = weapons[self.weapon_number][4]
+                self.player_image = pygame.image.load(self.player_skin)
         elif mouse_pos[0] > self.player_rect.topright[0]:
             if mouse_pos[1] < self.player_rect.topright[1]:
-                self.player_image = pygame.image.load('./public/player/player_top_right_pistol.png')
+                self.player_skin = weapons[self.weapon_number][5]
+                self.player_image = pygame.image.load(self.player_skin)
             if mouse_pos[1] > self.player_rect.bottomright[1]:
-                self.player_image = pygame.image.load('./public/player/player_bottom_right_pistol.png')
+                self.player_skin = weapons[self.weapon_number][6]
+                self.player_image = pygame.image.load(self.player_skin)
             if self.player_rect.bottomright[1] >= mouse_pos[1] >= self.player_rect.topright[1]:
-                self.player_image = pygame.image.load('./public/player/player_right_pistol.png')
+                self.player_skin = weapons[self.weapon_number][7]
+                self.player_image = pygame.image.load(self.player_skin)
 
     def update(self, tela):
         self.movimentar()
+        self.change_weapon()
         self.direction_animation()
         tela.blit(self.player_image, (self.pos_x, self.pos_y))
         self.player_rect = self.player_image.get_rect(topleft=(self.pos_x, self.pos_y))
 
-    def create_bullet(self):
-        return Bullet(self.player_rect.center[0], self.player_rect.center[1])
+    def atacar(self, timer_event):
+        self.weapons[self.weapon_number].atirar(self.player_rect.center[0], self.player_rect.center[1], timer_event)
+
+    def levar_dano(self, dano):
+        if not self.invulnerabilidade:
+            self.player_health -= dano
+        if self.player_health <= 0:
+            print('a')
+
+
+class Arma():
+    def __init__(self):
+        self.dano = int()
+        self.velocidade = int()
+        self.tempo_disparo = 1000
+        self.skin = list()
+        self.bullet_group = pygame.sprite.Group()
+
+    def create_bullet(self, player_pos_x, player_pos_y):
+        return Bullet(player_pos_x, player_pos_y)
+
+    def atirar(self, player_pos_x, player_pos_y, timer_event):
+        if event.type == timer_event:
+            self.bullet_group.add(self.create_bullet(player_pos_x, player_pos_y))
+
+    def bullet_update(self, tela):
+        self.bullet_group.draw(tela)
+        self.bullet_group.update()
+
+
+class Pistol(Arma):
+    def __init__(self):
+        super().__init__()
+        self.skin = ['./public/player/player_top_pistol.png',
+                     './public/player/player_bottom_pistol.png',
+                     './public/player/player_top_left_pistol.png',
+                     './public/player/player_bottom_left_pistol.png',
+                     './public/player/player_left_pistol.png',
+                     './public/player/player_top_right_pistol.png',
+                     './public/player/player_bottom_right_pistol.png',
+                     './public/player/player_right_pistol.png']
+
+
+class Shotguun(Arma):
+    def __init__(self):
+        super().__init__()
+        self.skin = ['./public/player/player_top_shotgun.png',
+                     './public/player/player_bottom_shotgun.png',
+                     './public/player/player_top_left_shotgun.png',
+                     './public/player/player_bottom_left_shotgun.png',
+                     './public/player/player_left_shotgun.png',
+                     './public/player/player_top_right_shotgun.png',
+                     './public/player/player_bottom_right_shotgun.png',
+                     './public/player/player_right_shotgun.png']
+
+
+class Sniper(Arma):
+    def __init__(self):
+        super().__init__()
+        self.skin = ['./public/player/player_top_sniper.png',
+                     './public/player/player_bottom_sniper.png',
+                     './public/player/player_top_left_sniper.png',
+                     './public/player/player_bottom_left_sniper.png',
+                     './public/player/player_left_sniper.png',
+                     './public/player/player_top_right_sniper.png',
+                     './public/player/player_bottom_right_sniper.png',
+                     './public/player/player_right_sniper.png']
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -84,35 +173,23 @@ class Bullet(pygame.sprite.Sprite):
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, velocidade, x_tela, y_tela):
         super().__init__()
+        self.vida = 3
         self.velocidade = velocidade
         self.pos_x = int()
         self.pos_y = int()
-        self.enemy_skin = './public/enemy/enemy_error.png'
+        self.dano = 1
+        self.enemy_skin = './public/enemy_error.png'
         self.enemy_image = pygame.image.load(self.enemy_skin)
         self.enemy_rect = self.enemy_image.get_rect()
         self.spawn_condition = False
         self.x_tela = x_tela
         self.y_tela = y_tela
-        self.sprites_left = list()
-        self.sprites_right = list()
-        self.sprites_left.append(pygame.image.load('./public/zombie_models/zombie_left_walking_1.png'))
-        self.sprites_left.append(pygame.image.load('./public/zombie_models/zombie_left_walking_2.png'))
-        self.sprites_right.append(pygame.image.load('./public/zombie_models/zombie_right_walking_1.png'))
-        self.sprites_right.append(pygame.image.load('./public/zombie_models/zombie_right_walking_2.png'))
+        self.sprites_left = [pygame.image.load('./public/zombie_models/zombie_left_walking_1.png'),
+                             pygame.image.load('./public/zombie_models/zombie_left_walking_2.png')]
+        self.sprites_right = [pygame.image.load('./public/zombie_models/zombie_right_walking_1.png'),
+                              pygame.image.load('./public/zombie_models/zombie_right_walking_2.png')]
         self.current_walking_sprite = 0
-        self.attack_sprites_left = list()
-        self.attack_sprites_right = list()
-        self.attack_sprites_left.append(pygame.image.load('./public/zombie_models/zombie_left_atk_1.png'))
-        self.attack_sprites_left.append(pygame.image.load('./public/zombie_models/zombie_left_atk_2.png'))
-        self.attack_sprites_left.append(pygame.image.load('./public/zombie_models/zombie_left_atk_3.png'))
-        self.attack_sprites_left.append(pygame.image.load('./public/zombie_models/zombie_left_atk_4.png'))
-        self.attack_sprites_right.append(pygame.image.load('./public/zombie_models/zombie_right_atk_1.png'))
-        self.attack_sprites_right.append(pygame.image.load('./public/zombie_models/zombie_right_atk_2.png'))
-        self.attack_sprites_right.append(pygame.image.load('./public/zombie_models/zombie_right_atk_3.png'))
-        self.attack_sprites_right.append(pygame.image.load('./public/zombie_models/zombie_right_atk_4.png'))
-        self.current_attack_sprite = 0
-        self.player_distance = 0
-        self.attack_state = False
+        self.player_distance = int()
 
     def movement(self, x_player, y_player):
         # move the enemy towards the player
@@ -142,47 +219,32 @@ class Inimigo(pygame.sprite.Sprite):
         else:
             self.enemy_image = self.sprites_left[int(self.current_walking_sprite)]
 
-    def attack(self, x_player, y_player):
-
-        if self.enemy_rect.center[0] > x_player:
-            self.enemy_image = self.attack_sprites_right[int(self.current_attack_sprite)]
-        else:
-            self.enemy_image = self.attack_sprites_right[int(self.current_attack_sprite)]
-
-        self.attack_state += 0.02
-
-        if self.current_attack_sprite == len(self.attack_sprites_right):
-            self.current_attack_sprite = 0
-            self.attack_state = False
-            self.player_distance = (((self.pos_x - x_player) ** 2) + ((self.pos_y - y_player) ** 2)) ** (1 / 2)
-
     def update(self, screen, x_player, y_player):
 
-        self.player_distance = (((self.pos_x - x_player) ** 2) + ((self.pos_y - y_player) ** 2)) ** (1 / 2)
-        if self.player_distance <= 5:
-            self.attack_state = True
-
-        if not self.attack_state:
-            if not self.spawn_condition:
-                self.spawn(x_player, y_player)
-            else:
-                self.movement(x_player, y_player)
-
-            self.walking_animation(x_player)
-
-            self.player_distance = (((self.pos_x - x_player) ** 2) + ((self.pos_y - y_player) ** 2)) ** (1 / 2)
-            if self.player_distance <= 5:
-                self.attack_state = True
-
+        if not self.spawn_condition:
+            self.spawn(x_player, y_player)
         else:
-            self.attack(x_player, y_player)
+            self.movement(x_player, y_player)
+
+        self.walking_animation(x_player)
+
+        self.player_distance = (((self.pos_x - x_player) ** 2) + ((self.pos_y - y_player) ** 2)) ** (1 / 2)
 
         screen.blit(self.enemy_image, (self.pos_x, self.pos_y))
         self.enemy_rect = self.enemy_image.get_rect(topleft=(self.pos_x, self.pos_y))
 
     def estado(self, bullet_rect):
+        flag = 0
         if self.enemy_rect.colliderect(bullet_rect):
+            self.vida -= 1
+            flag += 1
+        if self.vida <= 0:
             self.kill()
+        return flag
+
+    def attack(self, player):
+        if self.enemy_rect.colliderect(player.player_rect):
+            player.levar_dano(self.dano)
 
 
 if __name__ == '__main__':
@@ -191,6 +253,9 @@ if __name__ == '__main__':
     pygame.display.set_caption(f'jogu')
     clock = pygame.time.Clock()
     p1 = Player()
+    timer_event = pygame.USEREVENT + 1
+    timer_interval = 1000
+    pygame.time.set_timer(timer_event, timer_interval)
 
     bullet_group = pygame.sprite.Group()
     enemy_group = pygame.sprite.Group()
@@ -203,17 +268,23 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                bullet_group.add(p1.create_bullet())
+            p1.atacar(timer_event)
 
         tela.fill((48, 10, 36))
+
         for inimigo in enemy_group.sprites():
             inimigo.update(tela, p1.pos_x, p1.pos_y)
-        bullet_group.draw(tela)
-        bullet_group.update()
+
+        p1.weapons[p1.weapon_number].bullet_update(tela)
+
         for inimigo in enemy_group.sprites():
-            for bullet in bullet_group.sprites():
+            inimigo.attack(p1)
+            for bullet in p1.weapons[p1.weapon_number].bullet_group.sprites():
                 inimigo.estado(bullet.rect)
+                if inimigo.estado(bullet.rect) >= 1:
+                    bullet.kill()
+
         p1.update(tela)
+
         pygame.display.update()
         clock.tick(60)
