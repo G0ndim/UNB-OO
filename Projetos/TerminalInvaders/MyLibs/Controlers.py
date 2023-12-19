@@ -39,16 +39,18 @@ class Round:
             self.condicao_vitoria = True
 
 
+
+
 if __name__ == '__main__':
     pygame.init()
-    tela = pygame.display.set_mode((1080, 1080))
+    tela = pygame.display.set_mode((900, 900))
     pygame.display.set_caption(f'jogu')
     clock = pygame.time.Clock()
     player_health = 10
     player_velocity = 3
     player = [player_health, player_velocity]
-    enemys1 = [1, 2, 3, 1]
-    round1 = Round(player, enemys1, 1080, 1080)
+    enemys1 = [1, 2, 3, 1, 0]
+    round1 = Round(player, enemys1, 900, 900)
 
     timer_event = pygame.USEREVENT + 1
     timer_interval = 1000
@@ -75,7 +77,8 @@ if __name__ == '__main__':
         horda = [round1.grupo_zumbis.sprites(),
                  round1.grupo_morcegos.sprites(),
                  round1.grupo_magos.sprites(),
-                 round1.grupo_slime_king.sprites()]
+                 round1.grupo_slime_king.sprites(),
+                 round1.grupo_slime.sprites()]
 
         tela.fill((48, 10, 36))  # Cor de Fundo da Tela
 
@@ -84,6 +87,7 @@ if __name__ == '__main__':
                 inimigo.update(tela, round1.player.pos_x, round1.player.pos_y)
 
         round1.player.weapons[round1.player.weapon_number].bullet_update(tela)
+
         for enemy_mage in round1.grupo_magos.sprites():
             enemy_mage.fireball_update(tela)
 
@@ -91,9 +95,11 @@ if __name__ == '__main__':
             for inimigo in enemy_type:
                 inimigo.attack(round1.player, timer_event2, timer_interval2)
                 for bullet in round1.player.weapons[round1.player.weapon_number].bullet_group.sprites():
-                    inimigo.estado(bullet.rect, round1.player.weapons[round1.player.weapon_number].dano)
-                    if inimigo.estado(bullet.rect, round1.player.weapons[round1.player.weapon_number].dano):
-                        bullet.kill()
+                    i = inimigo.estado(bullet, round1.player.weapons[round1.player.weapon_number].dano)
+                    if i != None:
+                        round1.grupo_slime.add(Slime(900, 900, i[0], i[1]))
+                        round1.grupo_slime.add(Slime(900, 900, i[0] + 9, i[1] + 30))
+                        round1.grupo_slime.add(Slime(900, 900, i[0] + 14, i[1] - 30))
 
         round1.player.update(tela)
 

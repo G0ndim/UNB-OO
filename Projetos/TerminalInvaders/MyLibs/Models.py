@@ -9,8 +9,8 @@ class Player(pygame.sprite.Sprite):
         self.player_health = vida
         self.pos_x = 450
         self.pos_y = 450
-        self.weapons = [0, Pistol(), Shotguun(), Sniper()]
-        self.weapon_number = 1
+        self.weapons = [Pistol(), Shotguun(), Sniper()]
+        self.weapon_number = 0
         self.player_skin = '../public/player_test.png'
         self.player_image = pygame.image.load(self.player_skin)
         self.player_rect = self.player_image.get_rect()
@@ -21,12 +21,12 @@ class Player(pygame.sprite.Sprite):
 
     def change_weapon(self):
         keys = pygame.key.get_pressed()
+        if keys[pygame.K_1]:
+            self.weapon_number = 0
         if keys[pygame.K_2]:
             self.weapon_number = 1
         if keys[pygame.K_3]:
             self.weapon_number = 2
-        if keys[pygame.K_4]:
-            self.weapon_number = 3
 
     def movimentar(self):
         # Movimento do jogador na tela
@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
     def direction_animation(self):
         # Movimento do personagem na direcao do mouse
         mouse_pos = pygame.mouse.get_pos()
-        weapons = [0, self.weapons[1].skin, self.weapons[2].skin, self.weapons[3].skin]
+        weapons = [self.weapons[0].skin, self.weapons[1].skin, self.weapons[2].skin]
         if self.player_rect.topleft[0] <= mouse_pos[0] <= self.player_rect.topright[0]:
             if mouse_pos[1] <= self.pos_y:
                 self.player_skin = weapons[self.weapon_number][0]
@@ -264,13 +264,13 @@ class Inimigo(pygame.sprite.Sprite):
         x_inicial = randint(0, 1)
         y_inicial = randint(0, 1)
         if x_inicial:
-            self.pos_x = randint(self.x_tela, self.x_tela + 100)
+            self.pos_x = randint(self.x_tela + 10, self.x_tela + 20)
         else:
-            self.pos_x = randint(-100, 0)
+            self.pos_x = randint(-20, -10)
         if y_inicial:
-            self.pos_y = randint(self.y_tela, self.y_tela + 100)
+            self.pos_y = randint(self.y_tela + 10, self.y_tela + 20)
         else:
-            self.pos_y = randint(-100, 0)
+            self.pos_y = randint(-20, -10)
         self.spawn_condition = True
 
     def walking_animation(self, x_player):
@@ -295,14 +295,12 @@ class Inimigo(pygame.sprite.Sprite):
         screen.blit(self.enemy_image, (self.pos_x, self.pos_y))
         self.enemy_rect = self.enemy_image.get_rect(topleft=(self.pos_x, self.pos_y))
 
-    def estado(self, bullet_rect, dano_recebido):
-        flag = False
-        if self.enemy_rect.colliderect(bullet_rect):
+    def estado(self, bullet, dano_recebido):
+        if self.enemy_rect.colliderect(bullet.rect):
             self.vida -= dano_recebido
-            flag += True
+            bullet.kill()
         if self.vida <= 0:
             self.kill()
-        return flag
 
     def attack(self, player, timer_event, timer_interval):
         if self.enemy_rect.colliderect(player.player_rect):
@@ -420,6 +418,12 @@ class Mage(Inimigo):
         self.fireball_group.draw(tela)
         self.fireball_group.update()
 
+    def attack(self, player, timer_event, timer_interval):
+        for spell in self.fireball_group.sprites():
+            if spell.rect.colliderect(player.player_rect):
+                player.levar_dano(self.dano, timer_event, timer_interval)
+                spell.kill()
+
 
 class Slime(Inimigo):
     def __init__(self, x_tela, y_tela, x_inicial, y_inicial):
@@ -430,11 +434,12 @@ class Slime(Inimigo):
                               pygame.image.load('../public/King_Slime/slime_2.png')]
         self.dano = 4
         self.velocidade = 0.3
-        self.pos_x = x_inicial
-        self.pos_y = y_inicial
+        self.x_inicial = x_inicial
+        self.y_inicial = y_inicial
 
     def spawn(self, x_player, y_player):
-        # spawns the enemy outside the screen in a random place when instanced
+        self.pos_x = self.x_inicial
+        self.pos_y = self.y_inicial
         self.spawn_condition = True
 
 
@@ -450,6 +455,29 @@ class KingSlime(Inimigo):
         self.death_flag = False
         self.x_death = int()
         self.y_death = int()
+
+    def update(self, screen, x_player, y_player):
+        if self.death_flag:
+            self.kill()
+        if not self.spawn_condition:
+            self.spawn(x_player, y_player)
+        else:
+            self.movement(x_player, y_player)
+
+        self.walking_animation(x_player)
+
+        self.player_distance = (((self.pos_x - x_player) ** 2) + ((self.pos_y - y_player) ** 2)) ** (1 / 2)
+
+        screen.blit(self.enemy_image, (self.pos_x, self.pos_y))
+        self.enemy_rect = self.enemy_image.get_rect(topleft=(self.pos_x, self.pos_y))
+
+    def estado(self, bullet, dano_recebido):
+        if self.enemy_rect.colliderect(bullet.rect):
+            self.vida -= dano_recebido
+            bullet.kill()
+        if self.vida <= 0:
+            self.death_flag = True
+            return (self.pos_x, self.pos_y)
 
 
 if __name__ == '__main__':
@@ -492,9 +520,8 @@ if __name__ == '__main__':
         for inimigo in enemy_group.sprites():
             inimigo.attack(p1, timer_event2, timer_interval2)
             for bullet in p1.weapons[p1.weapon_number].bullet_group.sprites():
-                inimigo.estado(bullet.rect, p1.weapons[p1.weapon_number].dano)
-                if inimigo.estado(bullet.rect, p1.weapons[p1.weapon_number].dano) >= 1:
-                    bullet.kill()
+                inimigo.estado(bullet, p1.weapons[p1.weapon_number].dano)
+
 
         p1.update(tela)
 
