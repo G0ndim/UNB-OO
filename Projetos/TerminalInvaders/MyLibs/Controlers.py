@@ -41,14 +41,16 @@ class Round:
 
 if __name__ == '__main__':
     pygame.init()
-    tela = pygame.display.set_mode((600, 600))
+    x_tela = 600
+    y_tela = 600
+    tela = pygame.display.set_mode((x_tela, y_tela))
     pygame.display.set_caption(f'jogu')
     clock = pygame.time.Clock()
-    player_health = 100
+    player_health = 120
     player_velocity = 0.75
     player = [player_health, player_velocity, 20, 10, 90, True, True]
-    enemys1 = [10, 6, 5, 4, 0]
-    round1 = Round(player, enemys1, 600, 600)
+    enemys1 = [1, 1, 1, 1, 0]
+    round1 = Round(player, enemys1, x_tela, y_tela)
     pontuacao = 0
     timer_event = pygame.USEREVENT + 1
     timer_interval = 1000
@@ -95,13 +97,16 @@ if __name__ == '__main__':
                 for bullet in round1.player.weapons[round1.player.weapon_number].bullet_group.sprites():
                     i = inimigo.estado(bullet, round1.player.weapons[round1.player.weapon_number].dano)
                     if isinstance(i, tuple):
-                        round1.grupo_slime.add(Slime(900, 900, i[0], i[1]))
-                        round1.grupo_slime.add(Slime(900, 900, i[0] + 9, i[1] + 30))
-                        round1.grupo_slime.add(Slime(900, 900, i[0] + 14, i[1] - 30))
+                        round1.grupo_slime.add(Slime(x_tela, y_tela, i[0], i[1]))
+                        round1.grupo_slime.add(Slime(x_tela, y_tela, i[0] + 9, i[1] + 30))
+                        round1.grupo_slime.add(Slime(x_tela, y_tela, i[0] + 14, i[1] - 30))
                     elif isinstance(i, int):
                         pontuacao += i
                         print(pontuacao)
                     i = 0
+
+        font = pygame.font.SysFont(None, 18)
+        tela.blit(font.render(f'{pontuacao}', True, (255, 255, 255)), (x_tela - 50, 6))
 
         round1.player.update(tela)
 

@@ -103,18 +103,20 @@ class Player(pygame.sprite.Sprite):
         if not self.invulnerabilidade:
             self.player_health -= dano
             self.invulnerabilidade = True
-            print(self.player_health)
+            # print(self.player_health)
             pygame.time.set_timer(timer_event, timer_interval, 1)
         if self.player_health <= 0:
             self.death_flag = True
-            print('Morto')
+            # print('Morto')
 
     def update_ui(self, tela):
         if self.player_health >= 0:
             self.health_bar = pygame.Surface((self.player_health, 9))
             self.health_bar.fill((255, 0, 0))
             tela.blit(self.health_bar, (6, 6))
-        tela.blit(self.weapon_images[self.weapon_number], (6, 21))
+            tela.blit(self.weapon_images[self.weapon_number], (6, 21))
+            font = pygame.font.SysFont(None, 18)
+            tela.blit(font.render(f'{self.player_health}', True, (255, 0, 0)), (self.player_health + 12, 6))
 
 
 class Arma:
@@ -321,8 +323,9 @@ class Inimigo(pygame.sprite.Sprite):
             self.vida -= dano_recebido
             bullet.kill()
         if self.vida <= 0:
-            self.death_flag = True
-            return self.pontuacao
+            if not self.death_flag:
+                self.death_flag = True
+                return self.pontuacao
 
     def attack(self, player, timer_event, timer_interval):
         if self.enemy_rect.colliderect(player.player_rect):
