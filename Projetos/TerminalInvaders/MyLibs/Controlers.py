@@ -34,9 +34,11 @@ class Round:
     def condicao_round(self):
         if self.player.death_flag:
             self.condicao_derrota = True
+            print('Derrota')
         if (len(self.grupo_zumbis.sprites()) == 0 and len(self.grupo_morcegos.sprites()) == 0 and
                 len(self.grupo_magos.sprites()) == 0 and len(self.grupo_slime_king.sprites()) == 0):
             self.condicao_vitoria = True
+            print('vitoria')
 
 
 class Arena:
@@ -105,9 +107,15 @@ class Arena:
                         self.count = 0
 
             font = pygame.font.SysFont(None, 18)
-            tela.blit(font.render(f'{self.pontuacao}', True, (255, 255, 255)), (x_tela - 50, 6))
+            tela.blit(font.render(f'{self.pontuacao}', True, (255, 255, 255)), (self.x_tela - 50, 6))
 
+            self.round1.condicao_round()
             self.round1.player.update(tela)
+
+            if self.round1.condicao_vitoria:
+                return (self.pontuacao, self.round1.player.player_health)
+            elif self.round1.condicao_derrota:
+                return self.pontuacao
 
             pygame.display.update()
             clock.tick(60)

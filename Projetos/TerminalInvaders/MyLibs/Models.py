@@ -341,7 +341,7 @@ class Zombie(Inimigo):
                               pygame.image.load('../public/zombie_models/zombie_right_walking_2.png')]
         self.vida = 100
         self.dano = 20
-        self.velocidade = 0.4
+        self.velocidade = uniform(0.4, 0.5)
         self.pontuacao = 100
 
 
@@ -354,7 +354,7 @@ class Bat(Inimigo):
                               pygame.image.load('../public/Bat/bat_2.png')]
         self.vida = 50
         self.dano = 10
-        self.velocidade = 0.7
+        self.velocidade = uniform(0.6, 0.7)
         self.pontuacao = 50
 
 
@@ -483,7 +483,7 @@ class KingSlime(Inimigo):
         self.sprites_right = [pygame.image.load('../public/King_Slime/king_slime_1.png'),
                               pygame.image.load('../public/King_Slime/king_slime_2.png')]
         self.dano = 50
-        self.velocidade = 0.3
+        self.velocidade = uniform(0.3, 0.4)
         self.vida = 300
         self.x_death = int()
         self.y_death = int()
