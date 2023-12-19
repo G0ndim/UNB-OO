@@ -4,28 +4,31 @@ from random import randint
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, vida, velocidade):
+    def __init__(self, vida, velocidade, w1_d, w2_d, w3_d, w2_c, w3_c):
         super().__init__()
         self.player_health = vida
+        self.velocidade = velocidade
+        self.pontuacao = 0
         self.pos_x = 450
         self.pos_y = 450
-        self.weapons = [Pistol(), Shotguun(), Sniper()]
+        self.weapons = [Pistol(w1_d), Shotguun(w2_d), Sniper(w3_d)]
         self.weapon_number = 0
         self.player_skin = '../public/player_test.png'
         self.player_image = pygame.image.load(self.player_skin)
         self.player_rect = self.player_image.get_rect()
-        self.velocidade = velocidade
         self.invulnerabilidade = 0
         self.inv_flag = 0
         self.death_flag = False
+        self.shotgun_condition = w2_c
+        self.sniper_condition = w3_c
 
     def change_weapon(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_1]:
             self.weapon_number = 0
-        if keys[pygame.K_2]:
+        if keys[pygame.K_2] and self.shotgun_condition:
             self.weapon_number = 1
-        if keys[pygame.K_3]:
+        if keys[pygame.K_3] and self.sniper_condition:
             self.weapon_number = 2
 
     def movimentar(self):
@@ -100,8 +103,8 @@ class Player(pygame.sprite.Sprite):
 
 
 class Arma:
-    def __init__(self):
-        self.dano = int()
+    def __init__(self, dano):
+        self.dano = dano
         self.velocidade = int()
         self.tempo_disparo = 1000
         self.skin = list()
@@ -121,8 +124,8 @@ class Arma:
 
 
 class Pistol(Arma):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, dano):
+        super().__init__(dano)
         self.skin = ['../public/player/player_top_pistol.png',
                      '../public/player/player_bottom_pistol.png',
                      '../public/player/player_top_left_pistol.png',
@@ -131,13 +134,13 @@ class Pistol(Arma):
                      '../public/player/player_top_right_pistol.png',
                      '../public/player/player_bottom_right_pistol.png',
                      '../public/player/player_right_pistol.png']
-        self.dano = 2
+        # self.dano = 2
         self.velocidade = 5
 
 
 class Shotguun(Arma):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, dano):
+        super().__init__(dano)
         self.skin = ['../public/player/player_top_shotgun.png',
                      '../public/player/player_bottom_shotgun.png',
                      '../public/player/player_top_left_shotgun.png',
@@ -147,7 +150,7 @@ class Shotguun(Arma):
                      '../public/player/player_bottom_right_shotgun.png',
                      '../public/player/player_right_shotgun.png']
         self.ang = int()
-        self.dano = 1
+        # self.dano = 1
         self.velocidade = 3
         self.range = 150
 
@@ -173,8 +176,8 @@ class Shotguun(Arma):
 
 
 class Sniper(Arma):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, dano):
+        super().__init__(dano)
         self.skin = ['../public/player/player_top_sniper.png',
                      '../public/player/player_bottom_sniper.png',
                      '../public/player/player_top_left_sniper.png',
@@ -183,7 +186,7 @@ class Sniper(Arma):
                      '../public/player/player_top_right_sniper.png',
                      '../public/player/player_bottom_right_sniper.png',
                      '../public/player/player_right_sniper.png']
-        self.dano = 9
+        # self.dano = 9
         self.velocidade = 10
         self.range = 900
 
@@ -239,6 +242,7 @@ class Inimigo(pygame.sprite.Sprite):
         super().__init__()
         self.vida = 5
         self.velocidade = float()
+        self.pontuacao = 0
         self.pos_x = int()
         self.pos_y = int()
         self.dano = int()
@@ -252,6 +256,7 @@ class Inimigo(pygame.sprite.Sprite):
         self.sprites_right = []
         self.current_walking_sprite = 0
         self.player_distance = int()
+        self.death_flag = False
 
     def movement(self, x_player, y_player):
         # move the enemy towards the player
@@ -282,7 +287,8 @@ class Inimigo(pygame.sprite.Sprite):
             self.enemy_image = self.sprites_left[int(self.current_walking_sprite)]
 
     def update(self, screen, x_player, y_player):
-
+        if self.death_flag:
+            self.kill()
         if not self.spawn_condition:
             self.spawn(x_player, y_player)
         else:
@@ -300,7 +306,8 @@ class Inimigo(pygame.sprite.Sprite):
             self.vida -= dano_recebido
             bullet.kill()
         if self.vida <= 0:
-            self.kill()
+            self.death_flag = True
+            return self.pontuacao
 
     def attack(self, player, timer_event, timer_interval):
         if self.enemy_rect.colliderect(player.player_rect):
@@ -317,6 +324,7 @@ class Zombie(Inimigo):
         self.vida = 5
         self.dano = 1
         self.velocidade = 0.5
+        self.pontuacao = 100
 
 
 class Bat(Inimigo):
@@ -329,6 +337,7 @@ class Bat(Inimigo):
         self.vida = 2
         self.dano = 0.5
         self.velocidade = 1
+        self.pontuacao = 50
 
 
 class Mage(Inimigo):
@@ -350,6 +359,7 @@ class Mage(Inimigo):
         self.y_final = int()
         self.attack_condition = False
         self.fireball_group = pygame.sprite.Group()
+        self.pontuacao = 150
 
     def spawn(self, x_player, y_player):
         # spawns the enemy outside the screen in a random place when instanced
@@ -391,6 +401,8 @@ class Mage(Inimigo):
             self.attack_condition = True
 
     def update(self, screen, x_player, y_player):
+        if self.death_flag:
+            self.kill()
         if not self.attack_condition:
             if not self.spawn_condition:
                 self.spawn(x_player, y_player)
@@ -436,6 +448,7 @@ class Slime(Inimigo):
         self.velocidade = 0.3
         self.x_inicial = x_inicial
         self.y_inicial = y_inicial
+        self.pontuacao = 75
 
     def spawn(self, x_player, y_player):
         self.pos_x = self.x_inicial
@@ -452,7 +465,6 @@ class KingSlime(Inimigo):
                               pygame.image.load('../public/King_Slime/king_slime_2.png')]
         self.dano = 4
         self.velocidade = 0.3
-        self.death_flag = False
         self.x_death = int()
         self.y_death = int()
 

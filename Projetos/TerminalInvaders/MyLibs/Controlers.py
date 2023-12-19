@@ -9,7 +9,7 @@ class Round:
         self.grupo_magos = pygame.sprite.Group()
         self.grupo_slime_king = pygame.sprite.Group()
         self.grupo_slime = pygame.sprite.Group()
-        self.player = Player(player[0], player[1])  # [0] -> vida, [1] -> velocidade
+        self.player = Player(player[0], player[1], player[2], player[3], player[4], player[5], player[6])
         self.enemy_list = enemys
         self.x_tela = x_tela
         self.y_tela = y_tela
@@ -48,10 +48,10 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     player_health = 10
     player_velocity = 3
-    player = [player_health, player_velocity]
+    player = [player_health, player_velocity, 2, 1, 9, True, True]
     enemys1 = [1, 2, 3, 1, 0]
     round1 = Round(player, enemys1, 900, 900)
-
+    pontuacao = 0
     timer_event = pygame.USEREVENT + 1
     timer_interval = 1000
     timer_event2 = pygame.USEREVENT + 2
@@ -96,10 +96,14 @@ if __name__ == '__main__':
                 inimigo.attack(round1.player, timer_event2, timer_interval2)
                 for bullet in round1.player.weapons[round1.player.weapon_number].bullet_group.sprites():
                     i = inimigo.estado(bullet, round1.player.weapons[round1.player.weapon_number].dano)
-                    if i != None:
+                    if isinstance(i, tuple):
                         round1.grupo_slime.add(Slime(900, 900, i[0], i[1]))
                         round1.grupo_slime.add(Slime(900, 900, i[0] + 9, i[1] + 30))
                         round1.grupo_slime.add(Slime(900, 900, i[0] + 14, i[1] - 30))
+                    elif isinstance(i, int):
+                        pontuacao += i
+                        print(pontuacao)
+                    i = 0
 
         round1.player.update(tela)
 
