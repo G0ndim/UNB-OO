@@ -9,7 +9,7 @@ class Round:
         self.grupo_magos = pygame.sprite.Group()
         self.grupo_slime_king = pygame.sprite.Group()
         self.grupo_slime = pygame.sprite.Group()
-        self.player = Player(player[0], player[1], player[2], player[3], player[4], player[5], player[6])
+        self.player = Player(x_tela, y_tela, player[0], player[1], player[2], player[3], player[4], player[5], player[6])
         self.enemy_list = enemys
         self.x_tela = x_tela
         self.y_tela = y_tela
@@ -39,18 +39,16 @@ class Round:
             self.condicao_vitoria = True
 
 
-
-
 if __name__ == '__main__':
     pygame.init()
-    tela = pygame.display.set_mode((900, 900))
+    tela = pygame.display.set_mode((600, 600))
     pygame.display.set_caption(f'jogu')
     clock = pygame.time.Clock()
-    player_health = 10
-    player_velocity = 3
-    player = [player_health, player_velocity, 2, 1, 9, True, True]
-    enemys1 = [1, 2, 3, 1, 0]
-    round1 = Round(player, enemys1, 900, 900)
+    player_health = 100
+    player_velocity = 0.75
+    player = [player_health, player_velocity, 20, 10, 90, True, True]
+    enemys1 = [10, 6, 5, 4, 0]
+    round1 = Round(player, enemys1, 600, 600)
     pontuacao = 0
     timer_event = pygame.USEREVENT + 1
     timer_interval = 1000
