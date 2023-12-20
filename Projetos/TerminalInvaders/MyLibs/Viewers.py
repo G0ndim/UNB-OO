@@ -1,5 +1,6 @@
 import pygame
 from Controlers import *
+import os
 
 
 class GameScreen:
@@ -60,15 +61,53 @@ class GameScreen:
 
 
 class MainScreen:
-    def __init__(self, game_screen, leader_board):
-        self.play = game_screen
-        self.placar_local = leader_board
+    def __init__(self):
+        self.play = None
+        self.play_button = pygame.image.load('../public/botao_JOGAR.jpeg')
+        self.play_button_rect = self.play_button.get_rect(topleft=(50, 30))
+        self.placar_button = pygame.image.load('../public/botao_PLACAR.jpeg')
+        self.placar_button_rect = self.placar_button.get_rect(topleft=(50, 185))
+        self.quit_button = pygame.image.load('../public/botao_SAIR.jpeg')
+        self.quit_button_rect = self.quit_button.get_rect(topleft=(50, 340))
 
     def tela_inicial(self):
-        pass
+        pygame.init()
+        tela = pygame.display.set_mode((700, 500))
+        pygame.display.set_caption(f'UPGRADE')
+        clock = pygame.time.Clock()
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            tela.fill((48, 10, 36))  # Cor de Fundo da Tela
+
+            tela.blit(self.play_button, (50, 30))
+            tela.blit(self.placar_button, (50, 185))
+            tela.blit(self.quit_button, (50, 340))
+
+            if self.placar_button_rect.collidepoint(mouse_x, mouse_y):
+                if mouse_pressed[0]:
+                    self.play = GameScreen().gameplay() # -- > (x, y)
+
+            elif self.placar_button_rect.collidepoint(mouse_x, mouse_y):
+                if mouse_pressed[0]:
+                    os.startfile('score.txt')
+
+            elif self.quit_button_rect.collidepoint(mouse_x, mouse_y):
+                if mouse_pressed[0]:
+                    pygame.quit()
+                    exit()
+
+            pygame.display.update()
+            clock.tick(120)
 
 
 if __name__ == '__main__':
-    teste = GameScreen()
-    i = teste.gameplay()
-    print(i)
+    teste = MainScreen()
+    i = teste.tela_inicial()

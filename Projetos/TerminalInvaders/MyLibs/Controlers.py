@@ -1,5 +1,7 @@
 import pygame
-
+import asyncio
+import sys
+import json
 from Models import *
 
 
@@ -217,27 +219,41 @@ class GameOver:
         clock = pygame.time.Clock()
         font = pygame.font.SysFont(None, 30)
 
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_BACKSPACE:
-                        self.username = self.username[:-1]
-                    if event.key == pygame.K_RETURN:
-                        return (self.username, self.final_score)
-                    else:
-                        self.username += event.unicode
+        data = []
 
-            tela.fill((48, 10, 36))  # Cor de Fundo da Tela
-            tela.blit(self.background_image, (0, 0))
-            tela.blit(font.render(f'DIGITE SEU NOME', True, (0, 255, 1)), (200, 375))
-            text_surface = font.render(self.username, True, (255, 255, 255))
-            tela.blit(text_surface, (200, 400))
+        try:
+            with open('score.txt') as score_file:
+                data = json.load(score_file)
+        except:
+            pass
 
-            pygame.display.update()
-            clock.tick(120)
+        async def main():
+            while True:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        with open('score.txt', 'w') as score_file:
+                            json.dump(data, score_file)
+                        pygame.quit()
+                        exit()
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_BACKSPACE:
+                            self.username = self.username[:-1]
+                        if event.key == pygame.K_RETURN:
+                            data.update({"Player": self.username, "Score": self.final_score})
+                        else:
+                            self.username += event.unicode
+
+                tela.fill((48, 10, 36))  # Cor de Fundo da Tela
+                tela.blit(self.background_image, (0, 0))
+                tela.blit(font.render(f'DIGITE SEU NOME', True, (0, 255, 1)), (200, 375))
+                text_surface = font.render(self.username, True, (255, 255, 255))
+                tela.blit(text_surface, (200, 400))
+
+                pygame.display.update()
+                clock.tick(120)
+
+                await asyncio.sleep(0)
+        asyncio.run(main())
 
 
 if __name__ == '__main__':
@@ -245,19 +261,7 @@ if __name__ == '__main__':
     i.morte()
 
 """
-    y_tela = 600
-    player_health = 100
-    player_velocity = 0.75
-    pistol_damage = 20
-    shotgun_damage = 10
-    sniper_damage = 90
-    shotgun_enable = True
-    sniper_enable = True
-    player = [player_health, player_velocity, pistol_damage, shotgun_damage, sniper_damage, shotgun_enable,
-              sniper_enable]
-    i = Upgrade(player, y_tela)
-    f = i.update_parameters()
-    print(f'{f}')
+    
     
     
     x_tela = 600
