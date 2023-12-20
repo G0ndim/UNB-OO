@@ -103,7 +103,7 @@ class Player(pygame.sprite.Sprite):
         if not self.invulnerabilidade:
             self.player_health -= dano
             self.invulnerabilidade = True
-            # print(self.player_health)
+            print('Levou Dano')
             pygame.time.set_timer(timer_event, timer_interval, 1)
         if self.player_health <= 0:
             self.death_flag = True

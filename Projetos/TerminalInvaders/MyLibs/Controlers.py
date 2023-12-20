@@ -1,4 +1,5 @@
 import pygame
+
 from Models import *
 
 
@@ -93,18 +94,19 @@ class Arena:
             for enemy_mage in self.round1.grupo_magos.sprites():
                 enemy_mage.fireball_update(tela)
 
-            for enemy_type in horda:
-                for inimigo in enemy_type:
-                    inimigo.attack(self.round1.player, timer_event2, timer_interval2)
-                    for bullet in self.round1.player.weapons[self.round1.player.weapon_number].bullet_group.sprites():
-                        self.count = inimigo.estado(bullet, self.round1.player.weapons[self.round1.player.weapon_number].dano)
-                        if isinstance(self.count, tuple):
-                            self.round1.grupo_slime.add(Slime(x_tela, y_tela, self.count[0], self.count[1]))
-                            self.round1.grupo_slime.add(Slime(x_tela, y_tela, self.count[0] + 9, self.count[1] + 30))
-                            self.round1.grupo_slime.add(Slime(x_tela, y_tela, self.count[0] + 14, self.count[1] - 30))
-                        elif isinstance(self.count, int):
-                            self.pontuacao += self.count
-                        self.count = 0
+            if pygame.time.get_ticks() >= 500:
+                for enemy_type in horda:
+                    for inimigo in enemy_type:
+                        inimigo.attack(self.round1.player, timer_event2, timer_interval2)
+                        for bullet in self.round1.player.weapons[self.round1.player.weapon_number].bullet_group.sprites():
+                            self.count = inimigo.estado(bullet, self.round1.player.weapons[self.round1.player.weapon_number].dano)
+                            if isinstance(self.count, tuple):
+                                self.round1.grupo_slime.add(Slime(self.x_tela, self.y_tela, self.count[0], self.count[1]))
+                                self.round1.grupo_slime.add(Slime(self.x_tela, self.y_tela, self.count[0] + 9, self.count[1] + 30))
+                                self.round1.grupo_slime.add(Slime(self.x_tela, self.y_tela, self.count[0] + 14, self.count[1] - 30))
+                            elif isinstance(self.count, int):
+                                self.pontuacao += self.count
+                            self.count = 0
 
             font = pygame.font.SysFont(None, 18)
             tela.blit(font.render(f'{self.pontuacao}', True, (255, 255, 255)), (self.x_tela - 50, 6))
@@ -118,11 +120,146 @@ class Arena:
                 return self.pontuacao
 
             pygame.display.update()
-            clock.tick(60)
+            clock.tick(120)
+
+
+class Upgrade:
+    def __init__(self, p, screen_resolution):
+        self.player_health = p[0]
+        self.player_velocity = p[1]
+        self.pistol_damage = p[2]
+        self.shotgun_damage = p[3]
+        self.sniper_damage = p[4]
+        self.shotgun_condition = p[5]
+        self.sniper_condition = p[6]
+        self.screen_resolution = screen_resolution
+        self.upgrade_health_image = pygame.image.load('../public/upgrade_HEALTH.jpeg')
+        self.health_rect = self.upgrade_health_image.get_rect(topleft=(24, 180))
+        self.upgrade_velocity_image = pygame.image.load('../public/upgrade_SPEED.jpeg')
+        self.velocity_rect = self.upgrade_velocity_image.get_rect(topleft=(312, 180))
+        self.upgrade_screen_image = pygame.image.load('../public/upgrade_SCREEN.jpeg')
+        self.screen_rect = self.upgrade_screen_image.get_rect(topleft=(456, 180))
+        self.upgrade_damage_image = pygame.image.load('../public/upgrade_DAMAGE.jpeg')
+        self.damage_rect = self.upgrade_damage_image.get_rect(topleft=(168, 180))
+
+    def update_parameters(self):
+        tela = pygame.display.set_mode((600, 400))
+        pygame.display.set_caption(f'UPGRADE')
+        clock = pygame.time.Clock()
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            tela.fill((48, 10, 36))  # Cor de Fundo da Tela
+
+            font = pygame.font.SysFont(None, 30)
+            tela.blit(font.render(f'ESCOLHA UM UPGRADE', True, (0, 255, 1)), (165, 60))
+
+            tela.blit(self.upgrade_health_image, (24, 180))
+            tela.blit(self.upgrade_damage_image, (168, 180))
+            tela.blit(self.upgrade_velocity_image, (312, 180))
+            tela.blit(self.upgrade_screen_image, (456, 180))
+
+            if self.health_rect.collidepoint(mouse_x, mouse_y):
+                if mouse_pressed[0]:
+                    print('a')
+                    return ([self.player_health + 25, self.player_velocity,
+                             self.pistol_damage, self.shotgun_damage, self.sniper_damage,
+                             self.shotgun_condition, self.sniper_condition], self.screen_resolution)
+            elif self.damage_rect.collidepoint(mouse_x, mouse_y):
+                if mouse_pressed[0]:
+                    print('b')
+                    if self.shotgun_condition and not self.sniper_condition:
+                        return ([self.player_health, self.player_velocity,
+                                 self.pistol_damage, self.shotgun_damage + 5, self.sniper_damage,
+                                 self.shotgun_condition, self.sniper_condition], self.screen_resolution)
+                    elif self.sniper_condition:
+                        return ([self.player_health, self.player_velocity,
+                                 self.pistol_damage, self.shotgun_damage, self.sniper_damage + 5,
+                                 self.shotgun_condition, self.sniper_condition], self.screen_resolution)
+                    else:
+                        return ([self.player_health, self.player_velocity,
+                                self.pistol_damage + 5, self.shotgun_damage, self.sniper_damage,
+                                self.shotgun_condition, self.sniper_condition], self.screen_resolution)
+            elif self.velocity_rect.collidepoint(mouse_x, mouse_y):
+                if mouse_pressed[0]:
+                    print('c')
+                    return ([self.player_health, self.player_velocity + 0.2,
+                             self.pistol_damage, self.shotgun_damage, self.sniper_damage,
+                             self.shotgun_condition, self.sniper_condition], self.screen_resolution)
+            elif self.screen_rect.collidepoint(mouse_x, mouse_y):
+                if mouse_pressed[0]:
+                    print('d')
+                    return ([self.player_health, self.player_velocity,
+                             self.pistol_damage, self.shotgun_damage, self.sniper_damage,
+                             self.shotgun_condition, self.sniper_condition], self.screen_resolution + 50)
+
+            pygame.display.update()
+            clock.tick(120)
+
+
+class GameOver:
+    def __init__(self, final_score):
+        self.username = ''
+        self.final_score = final_score
+        self.background_image = pygame.transform.scale(pygame.image.load('../public/tela_GAMEOVER.jpeg'), (600, 600))
+
+    def morte(self):
+        pygame.init()
+        tela = pygame.display.set_mode((600, 600))
+        pygame.display.set_caption(f'GAME OVER')
+        clock = pygame.time.Clock()
+        font = pygame.font.SysFont(None, 30)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_BACKSPACE:
+                        self.username = self.username[:-1]
+                    if event.key == pygame.K_RETURN:
+                        return (self.username, self.final_score)
+                    else:
+                        self.username += event.unicode
+
+            tela.fill((48, 10, 36))  # Cor de Fundo da Tela
+            tela.blit(self.background_image, (0, 0))
+            tela.blit(font.render(f'DIGITE SEU NOME', True, (0, 255, 1)), (200, 375))
+            text_surface = font.render(self.username, True, (255, 255, 255))
+            tela.blit(text_surface, (200, 400))
+
+            pygame.display.update()
+            clock.tick(120)
 
 
 if __name__ == '__main__':
+    i = GameOver(10)
+    i.morte()
 
+"""
+    y_tela = 600
+    player_health = 100
+    player_velocity = 0.75
+    pistol_damage = 20
+    shotgun_damage = 10
+    sniper_damage = 90
+    shotgun_enable = True
+    sniper_enable = True
+    player = [player_health, player_velocity, pistol_damage, shotgun_damage, sniper_damage, shotgun_enable,
+              sniper_enable]
+    i = Upgrade(player, y_tela)
+    f = i.update_parameters()
+    print(f'{f}')
+    
+    
     x_tela = 600
     y_tela = 600
     player_health = 100
@@ -137,9 +274,10 @@ if __name__ == '__main__':
     pontuacao = 500  # exemplo de pontuacao que foi obtida em round anterior
     arena = Arena(player, enemys1, x_tela, y_tela, pontuacao)
     arena.play()
-
-
-"""
+    
+    
+    
+    
     pygame.init()
     
     x_tela = 600
